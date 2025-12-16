@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Users, MessageSquare, Shield, Check, Search } from 'lucide-react';
 import { getAllUsers, getSupportTickets, updateTicketStatus, updateUserPremiumStatus } from '../../services/firestore';
 import type { User, SupportTicket } from '../../types';
+import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 import './AdminDashboard.css';
 
 export const AdminDashboard: React.FC = () => {
@@ -13,6 +14,7 @@ export const AdminDashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
+        console.log("Admin Dashboard v2.0 - Premium Features Enabled");
         loadData();
     }, []);
 
@@ -65,7 +67,12 @@ export const AdminDashboard: React.FC = () => {
     const filteredUsers = users.filter(u =>
         u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         u.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    ).sort((a, b) => {
+        // Admins first
+        if (a.role === 'admin' && b.role !== 'admin') return -1;
+        if (a.role !== 'admin' && b.role === 'admin') return 1;
+        return 0;
+    });
 
     return (
         <div className="admin-dashboard">
@@ -124,7 +131,20 @@ export const AdminDashboard: React.FC = () => {
                                     {filteredUsers.map(u => (
                                         <tr key={u.id}>
                                             <td className="user-cell">
-                                                <img src={u.avatar} alt={u.name} className="user-avatar-sm" />
+                                                <div
+                                                    className="user-avatar-sm"
+                                                    style={{
+                                                        backgroundColor: u.role === 'admin' ? '#FFD700' : getAvatarColor(u.name),
+                                                        color: u.role === 'admin' ? '#000' : '#FFF',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center',
+                                                        fontWeight: 'bold',
+                                                        fontSize: '0.8rem'
+                                                    }}
+                                                >
+                                                    {getInitials(u.name)}
+                                                </div>
                                                 <span>{u.name}</span>
                                             </td>
                                             <td>{u.email}</td>
@@ -138,7 +158,7 @@ export const AdminDashboard: React.FC = () => {
                                                     {u.isPremium ? (
                                                         <span className="badge premium">Premium</span>
                                                     ) : (
-                                                        <span className="badge free">Free</span>
+                                                        <span className="badge free" title="Standart Üyelik">Free</span>
                                                     )}
                                                     <button
                                                         onClick={() => handleTogglePremium(u.id, u.isPremium)}
