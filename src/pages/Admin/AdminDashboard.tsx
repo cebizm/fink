@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, MessageSquare, Shield, Check, Search } from 'lucide-react';
-import { getAllUsers, getSupportTickets, updateTicketStatus } from '../../services/firestore';
+import { getAllUsers, getSupportTickets, updateTicketStatus, updateUserPremiumStatus } from '../../services/firestore';
 import type { User, SupportTicket } from '../../types';
 import './AdminDashboard.css';
 
@@ -44,6 +44,21 @@ export const AdminDashboard: React.FC = () => {
         } catch (error) {
             console.error(error);
             alert('Bir hata oluştu.');
+        }
+    };
+
+    const handleTogglePremium = async (userId: string, currentStatus: boolean) => {
+        if (!confirm(`Bu kullanıcının Premium üyeliğini ${currentStatus ? 'iptal etmek' : 'aktif etmek'} istediğinize emin misiniz?`)) return;
+
+        try {
+            await updateUserPremiumStatus(userId, !currentStatus);
+            // Optimistic update
+            setUsers(prev => prev.map(u =>
+                u.id === userId ? { ...u, isPremium: !currentStatus } : u
+            ));
+        } catch (error) {
+            console.error(error);
+            alert('Güncelleme başarısız.');
         }
     };
 
@@ -119,11 +134,27 @@ export const AdminDashboard: React.FC = () => {
                                                 </span>
                                             </td>
                                             <td>
-                                                {u.isPremium ? (
-                                                    <span className="badge premium">Premium</span>
-                                                ) : (
-                                                    <span className="badge free">Free</span>
-                                                )}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                    {u.isPremium ? (
+                                                        <span className="badge premium">Premium</span>
+                                                    ) : (
+                                                        <span className="badge free">Free</span>
+                                                    )}
+                                                    <button
+                                                        onClick={() => handleTogglePremium(u.id, u.isPremium)}
+                                                        className="btn-icon-sm"
+                                                        title={u.isPremium ? "Premium'u İptal Et" : "Premium Yap"}
+                                                        style={{
+                                                            border: '1px solid var(--border-color)',
+                                                            borderRadius: '4px',
+                                                            padding: '2px 6px',
+                                                            cursor: 'pointer',
+                                                            fontSize: '0.7rem'
+                                                        }}
+                                                    >
+                                                        {u.isPremium ? 'İptal' : 'Yükselt'}
+                                                    </button>
+                                                </div>
                                             </td>
                                             <td>
                                                 {u.lastLogin ? new Date(u.lastLogin).toLocaleDateString('tr-TR', {

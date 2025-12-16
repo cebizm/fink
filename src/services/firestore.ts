@@ -211,3 +211,7 @@ export const updateTicketStatus = async (ticketId: string, status: 'open' | 'in_
     await updateDoc(doc(db, 'support_tickets', ticketId), { status });
 };
 
+export const updateUserPremiumStatus = async (userId: string, isPremium: boolean) => {
+    await updateDoc(doc(db, 'users', userId), { isPremium });
+};
+
