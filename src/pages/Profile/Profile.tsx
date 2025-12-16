@@ -5,6 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { ChevronRight, CreditCard, Shield, Moon, Sun, LogOut, User, MessageCircle, Globe, Trash2 } from 'lucide-react';
 import { VerifiedBadge } from '../../components/Common/VerifiedBadge';
+import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 import './Profile.css';
 
 export const Profile: React.FC = () => {
@@ -30,7 +31,24 @@ export const Profile: React.FC = () => {
             </header>
 
             <div className="profile-card">
-                <img src={user.avatar} alt={user.name} className="profile-avatar" />
+                {user.avatar ? (
+                    <img src={user.avatar} alt={user.name} className="profile-avatar" />
+                ) : (
+                    <div
+                        className="profile-avatar flex items-center justify-center text-white"
+                        style={{
+                            backgroundColor: getAvatarColor(user.name),
+                            fontSize: '2rem',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'white'
+                        }}
+                    >
+                        {getInitials(user.name)}
+                    </div>
+                )}
                 <div className="profile-info">
 
 

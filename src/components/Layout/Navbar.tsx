@@ -6,6 +6,7 @@ import { useFinance } from '../../context/FinanceContext';
 import { useAuth } from '../../context/AuthContext';
 import { PayDebtModal } from '../Modals/PayDebtModal';
 import { VerifiedBadge } from '../Common/VerifiedBadge';
+import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 import './Navbar.css';
 
 const navItems = [
@@ -155,12 +156,19 @@ export const Navbar: React.FC = () => {
 
                     <Link to="/profile" style={{ textDecoration: 'none' }}>
                         <div className="user-profile">
-                            <div className="avatar">
-                                {/* If we have auth, show user avatar, else U */}
+                            <div className="avatar" style={{
+                                backgroundColor: user?.avatar ? 'transparent' : getAvatarColor(user?.name || ''),
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontWeight: 'bold'
+                            }}>
+                                {/* If we have auth, show user avatar, else Initials */}
                                 {user?.avatar ? (
                                     <img src={user.avatar} alt="User" style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
                                 ) : (
-                                    "U"
+                                    getInitials(user?.name || "User")
                                 )}
                             </div>
                             <div className="user-info">
