@@ -3,7 +3,7 @@ import { ProfileSubPageLayout } from './ProfileSubPageLayout';
 import { Mail, Phone, MapPin, Instagram, Twitter } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { addSupportTicket } from '../../services/firestore';
-import type { TicketStatus } from '../../types';
+
 
 export const Support: React.FC = () => {
     const { user } = useAuth();

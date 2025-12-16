@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, MessageSquare, Shield, Check, X, Search } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
-import { getAllUsers, getSupportTickets } from '../../services/firestore';
+import { Users, MessageSquare, Shield, Check, Search } from 'lucide-react';
+import { getAllUsers, getSupportTickets, updateTicketStatus } from '../../services/firestore';
 import type { User, SupportTicket } from '../../types';
 import './AdminDashboard.css';
 
 export const AdminDashboard: React.FC = () => {
-    const { user } = useAuth();
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'users' | 'tickets'>('users');
     const [users, setUsers] = useState<User[]>([]);
     const [tickets, setTickets] = useState<SupportTicket[]>([]);
-    const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
@@ -20,7 +17,6 @@ export const AdminDashboard: React.FC = () => {
     }, []);
 
     const loadData = async () => {
-        setLoading(true);
         try {
             const [usersData, ticketsData] = await Promise.all([
                 getAllUsers(),
@@ -30,8 +26,6 @@ export const AdminDashboard: React.FC = () => {
             setTickets(ticketsData);
         } catch (error) {
             console.error("Failed to load admin data", error);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -39,9 +33,6 @@ export const AdminDashboard: React.FC = () => {
         if (!confirm('Bu talebi çözüldü olarak işaretlemek istediğinize emin misiniz?')) return;
 
         try {
-            // Dynamically import to avoid circular dependencies if any, or just import at top. 
-            // Better to add import at top.
-            const { updateTicketStatus } = await import('../../services/firestore');
             await updateTicketStatus(ticketId, 'resolved');
 
             // Optimistic update
