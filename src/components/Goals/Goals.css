@@ -1,0 +1,241 @@
+.goals-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.goals-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.goals-header h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+    letter-spacing: -0.03em;
+}
+
+.goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+}
+
+.goal-card {
+    background-color: var(--color-bg-card);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.goal-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+
+/* "Premium" Dark Style for Active Goals in Light Mode */
+/* In Dark Mode, this just blends in, so we might want a specific look */
+.goal-card.active {
+    background-color: #18181b;
+    /* Zinc 950 */
+    color: white;
+}
+
+/* Adjust text colors for dark card */
+.goal-card.active .goal-title,
+.goal-card.active .goal-amount-text,
+.goal-card.active .contribution-name,
+.goal-card.active .days-left {
+    color: white;
+}
+
+.goal-card.active .goal-shared-with {
+    color: #a1a1aa;
+    /* Zinc 400 */
+}
+
+/* In Dark Mode (where bg is already dark), we might want to invert or keep it dark? */
+[data-theme='dark'] .goal-card.active {
+    background-color: #27272a;
+    /* Zinc 800 - slightly lighter than bg */
+    border-color: #3f3f46;
+}
+
+.goal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.goal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.goal-shared-with {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-align: right;
+}
+
+.goal-amounts {
+    text-align: right;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.current-amount {
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.target-amount {
+    color: var(--color-text-secondary);
+    /* or Zinc 400 in dark card */
+    font-size: 1rem;
+}
+
+.goal-card.active .target-amount {
+    color: #a1a1aa;
+}
+
+.progress-container {
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Semi-transparent white for dark card */
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+
+[data-theme='light'] .goal-card:not(.active) .progress-container {
+    background-color: #e4e4e7;
+    /* Zinc 200 for light card */
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #84cc16;
+    /* Lime 500 - as in image */
+    border-radius: 999px;
+    transition: width 0.5s ease-out;
+}
+
+.contributions-list {
+    margin-bottom: 1rem;
+}
+
+.contributions-title {
+    font-size: 0.75rem;
+    color: #a1a1aa;
+    margin-bottom: 0.5rem;
+}
+
+.contribution-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+}
+
+.contribution-name {
+    font-weight: 500;
+}
+
+.contribution-amount {
+    font-weight: 700;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+}
+
+.days-left {
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.completed-badge {
+    background-color: #ecfdf5;
+    color: #059669;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.add-money-btn {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.goal-card.active .add-money-btn {
+    background-color: #84cc16;
+    color: black;
+}
+
+.add-money-btn:hover {
+    transform: scale(1.1);
+}
+
+.empty-goals {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    border: 2px dashed var(--border-color);
+    color: var(--color-text-muted);
+}
+
+.icon-btn-danger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    border-radius: var(--radius-full);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    /* Hidden by default */
+}
+
+.goal-card:hover .icon-btn-danger {
+    opacity: 1;
+    /* Show on hover */
+}
+
+.icon-btn-danger:hover {
+    color: var(--color-accent-danger);
+    background-color: rgba(239, 68, 68, 0.1);
+}

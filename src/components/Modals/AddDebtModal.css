@@ -1,0 +1,244 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background: var(--color-bg-card);
+    /* Fixed */
+    padding: 0;
+    /* Remove padding here, let header/form handle it */
+    border-radius: 1.5rem;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    /* Match standard */
+    overflow-y: auto;
+    /* Match standard */
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    margin: 0;
+    background-color: var(--color-bg-card);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.modal-header h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    /* Fixed */
+    margin: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: var(--color-text-secondary);
+    /* Fixed */
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close-btn:hover {
+    background-color: var(--color-bg-secondary);
+    /* Fixed */
+    color: var(--color-text-primary);
+    /* Fixed */
+}
+
+form {
+    padding: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
+    /* Fixed */
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Debt Type Selector */
+.type-selector {
+    display: flex;
+    background: var(--bg-secondary);
+    /* This might be wrong too, check standard? usually var(--color-bg-secondary) */
+    background-color: #f4f4f5;
+    /* Fallback/Standard light gray */
+    padding: 0.25rem;
+    border-radius: 0.75rem;
+    margin-bottom: 1.5rem;
+    gap: 0.25rem;
+}
+
+.type-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    /* Fixed */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.type-btn:hover {
+    color: var(--color-text-primary);
+    /* Fixed */
+}
+
+.type-btn.active {
+    background: var(--color-bg-card);
+    /* Fixed */
+    color: var(--color-text-primary);
+    /* Fixed */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-text-secondary);
+    /* Fixed */
+    pointer-events: none;
+    z-index: 10;
+}
+
+.currency-symbol {
+    position: absolute;
+    left: 1rem;
+    color: var(--color-text-primary);
+    /* Fixed */
+    font-weight: 600;
+    z-index: 10;
+}
+
+.add-debt-input {
+    width: 100%;
+    padding: 0.875rem 1rem 0.875rem 4rem !important;
+    /* 4rem = 64px, plenty of space */
+    background: #f9f9f9;
+    /* Fixed: Match standard input bg */
+    border: 1px solid var(--border-color);
+    border-radius: 0.75rem;
+    color: var(--color-text-primary);
+    /* Fixed */
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.add-debt-input:focus {
+    outline: none;
+    border-color: var(--color-text-primary);
+    /* Fixed */
+    background: white;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+    /* Fixed shadow color */
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    color: var(--color-text-primary);
+    /* Fixed */
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background: #f4f4f5;
+}
+
+.btn-submit {
+    background: #18181b;
+    /* Black button */
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background: #27272a;
+    /* Zinc-800 */
+    transform: translateY(-1px);
+}
+
+/* Bank Selection Grid (Optional - if we add preset banks later) */
+.bank-presets {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.bank-chip {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+.bank-chip:hover {
+    border-color: var(--primary-color);
+}

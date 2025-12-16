@@ -1,0 +1,120 @@
+.upsell-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.upsell-modal-content {
+    background-color: var(--color-bg-card);
+    width: 90%;
+    max-width: 400px;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--border-color);
+    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.upsell-icon-wrapper {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 15px -3px rgba(255, 215, 0, 0.3);
+}
+
+.upsell-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.upsell-description {
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.upsell-features {
+    text-align: left;
+    margin-bottom: 2rem;
+    background-color: var(--color-bg-secondary);
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+}
+
+.upsell-feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.upsell-feature-item:last-child {
+    margin-bottom: 0;
+}
+
+.upsell-btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: black;
+    border: none;
+    border-radius: var(--radius-full);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 6px -1px rgba(255, 215, 0, 0.2);
+}
+
+.upsell-btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(255, 215, 0, 0.3);
+}
+
+.upsell-btn-secondary {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.upsell-btn-secondary:hover {
+    color: var(--color-text-primary);
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

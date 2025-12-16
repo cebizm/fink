@@ -1,0 +1,174 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    padding: 1rem;
+    /* Add padding to prevent touching edges */
+}
+
+.modal-content {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    /* Limit height */
+    overflow-y: auto;
+    /* Enable scrolling */
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    animation: modalSlideUp 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    /* Keep header visible */
+    top: 0;
+    background-color: var(--color-bg-card);
+    z-index: 10;
+}
+
+.modal-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-full);
+    transition: all 0.2s;
+}
+
+.modal-close:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}
+
+.modal-form {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.875rem;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    color: var(--color-text-primary);
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+.form-group input:focus {
+    border-color: var(--color-text-primary);
+    background-color: var(--color-bg-card);
+    box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.type-toggle {
+    display: flex;
+    gap: 1rem;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 0.875rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-color);
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+    font-weight: 600;
+    background-color: var(--color-bg-card);
+}
+
+.type-btn:hover {
+    background-color: var(--color-bg-hover);
+}
+
+.type-btn.income.active {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--color-accent-success);
+    border-color: var(--color-accent-success);
+}
+
+.type-btn.expense.active {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--color-accent-danger);
+    border-color: var(--color-accent-danger);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    /* Add spacing */
+}
+
+.btn-secondary {
+    padding: 0.875rem 1.5rem;
+    border-radius: var(--radius-lg);
+    color: var(--color-text-primary);
+    font-weight: 600;
+    background-color: var(--color-bg-secondary);
+    /* Light gray button */
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: #e4e4e7;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

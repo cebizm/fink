@@ -1,0 +1,46 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    /* Vertical stack now */
+    min-height: 100vh;
+    background-color: var(--color-bg-primary);
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 0;
+    /* No sidebar margin */
+    padding-top: 80px;
+    /* Space for fixed Navbar */
+    min-height: 100vh;
+    position: relative;
+}
+
+.fab-btn {
+    position: fixed;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--color-text-primary);
+    /* Black button for Papara style */
+    color: var(--color-bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 90;
+    border: none;
+    cursor: pointer;
+}
+
+.fab-btn:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.15);
+}
+
+.fab-btn:active {
+    transform: translateY(0) scale(0.95);
+}

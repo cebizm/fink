@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --font-main: 'Inter', sans-serif;
+
+    /* Papara-like Light Theme Palette */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f4f4f5;
+    /* Zinc 100 */
+    --color-bg-card: #ffffff;
+    --color-bg-hover: #f4f4f5;
+
+    --color-text-primary: #18181b;
+    --color-text-secondary: #71717a;
+    --color-text-muted: #a1a1aa;
+
+    --color-accent-primary: #18181b;
+    --color-accent-secondary: #e4e4e7;
+
+    --color-accent-success: #10b981;
+    --color-accent-danger: #ef4444;
+    --color-accent-warning: #f59e0b;
+
+    --border-color: #e4e4e7;
+
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-glow: 0 0 0 transparent;
+
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+}
+
+[data-theme="dark"] {
+    /* Dark Theme Palette */
+    --color-bg-primary: #09090b;
+    /* Zinc 950 */
+    --color-bg-secondary: #18181b;
+    /* Zinc 900 */
+    --color-bg-card: #18181b;
+    --color-bg-hover: #27272a;
+    /* Zinc 800 */
+
+    --color-text-primary: #f4f4f5;
+    /* Zinc 100 */
+    --color-text-secondary: #a1a1aa;
+    /* Zinc 400 */
+    --color-text-muted: #71717a;
+    /* Zinc 500 */
+
+    --color-accent-primary: #fafafa;
+    /* White for primary buttons */
+    --color-accent-secondary: #27272a;
+
+    /* Adjust accents for better contrast on dark */
+    --color-accent-success: #34d399;
+    /* Emerald 400 */
+    --color-accent-danger: #f87171;
+    /* Red 400 */
+    --color-accent-warning: #fbbf24;
+    /* Amber 400 */
+
+    --border-color: #27272a;
+    /* Zinc 800 */
+
+    /* Dark mode shadows are subtle or glow-like */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+    --shadow-glow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+    font-family: inherit;
+}
+
+input,
+select,
+textarea {
+    font-family: inherit;
+    outline: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: #d4d4d8;
+    border-radius: var(--radius-lg);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1aa;
+}
+
+/* Utility Classes */
+.card {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-primary {
+    background-color: var(--color-accent-primary);
+    color: var(--color-bg-primary);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.text-gradient {
+    /* Using standard black/grey for titles to match minimalist look */
+    color: var(--color-text-primary);
+}

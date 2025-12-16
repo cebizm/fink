@@ -1,0 +1,214 @@
+.subscription-page {
+    padding: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.summary-card h3 {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.summary-amount {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+}
+
+
+/* Summary Card Header */
+.summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.summary-header h3 {
+    margin-bottom: 0;
+}
+
+.privacy-toggle-btn-small {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.privacy-toggle-btn-small:hover {
+    opacity: 1;
+    color: var(--color-accent-primary);
+}
+
+/* Tabs */
+.sub-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.sub-tab {
+    background: none;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.sub-tab:hover {
+    color: var(--color-text-primary);
+}
+
+.sub-tab.active {
+    color: var(--color-accent-primary);
+}
+
+.sub-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -0.55rem;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--color-accent-primary);
+    border-radius: 3px 3px 0 0;
+}
+
+.subscriptions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.subscription-card {
+    display: flex;
+    align-items: center;
+    padding: 1.25rem;
+    gap: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    /* For actions positioning if needed */
+}
+
+.subscription-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.sub-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sub-details {
+    flex: 1;
+}
+
+.sub-name {
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.25rem;
+    font-size: 1.125rem;
+}
+
+.sub-cat {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.sub-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+}
+
+.sub-freq {
+    background-color: var(--color-bg-secondary);
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    text-transform: capitalize;
+}
+
+.sub-date {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.sub-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+.sub-cost {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-text-primary);
+}
+
+.btn-icon-danger {
+    color: var(--color-text-secondary);
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    transition: all 0.2s;
+    opacity: 0;
+    /* Hidden by default for cleaner look */
+}
+
+.subscription-card:hover .btn-icon-danger {
+    opacity: 1;
+    /* Show on hover */
+}
+
+.btn-icon-danger:hover {
+    color: var(--color-accent-danger);
+    background-color: #fef2f2;
+}
+
+.empty-subs {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem;
+    color: var(--color-text-muted);
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    border: 1px dashed var(--border-color);
+}

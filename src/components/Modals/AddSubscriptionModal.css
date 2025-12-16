@@ -1,0 +1,31 @@
+.type-toggle-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.type-btn-lg {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.type-btn-lg:hover {
+    background-color: var(--color-hover);
+}
+
+.type-btn-lg.active {
+    background-color: var(--color-accent-primary);
+    color: white;
+    border-color: var(--color-accent-primary);
+}

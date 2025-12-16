@@ -1,0 +1,128 @@
+/* Reusing some logic from other modals but keeping it separate for modularity */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.close-btn {
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+}
+
+.close-btn:hover {
+    color: var(--color-text-primary);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.form-group input,
+.form-group select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-secondary);
+    transition: all 0.2s;
+    font-size: 0.925rem;
+}
+
+.form-group input:focus {
+    border-color: var(--color-accent-primary);
+    background-color: var(--color-bg-card);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.type-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    background-color: var(--color-bg-secondary);
+    padding: 0.25rem;
+    border-radius: var(--radius-md);
+}
+
+.type-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.type-btn.active {
+    background-color: var(--color-bg-card);
+    box-shadow: var(--shadow-sm);
+    color: var(--color-text-primary);
+    font-weight: 600;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.btn-secondary {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+}

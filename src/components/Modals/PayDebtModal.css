@@ -1,0 +1,130 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
+
+.pay-modal-content {
+    background: var(--color-bg-card);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+    animation: scaleUp 0.2s ease-out;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pay-modal-header h3 {
+    margin: 0;
+    color: var(--color-text-primary);
+    font-size: 1.25rem;
+}
+
+.current-debt-info {
+    background: var(--color-bg-secondary);
+    padding: 1rem;
+    border-radius: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.debt-label {
+    font-size: 0.9rem;
+    color: var(--color-text-secondary);
+}
+
+.debt-val {
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.pay-input-wrapper {
+    position: relative;
+}
+
+.currency-prefix {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.pay-input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 2.5rem;
+    font-size: 1.25rem;
+    border: 2px solid var(--border-color);
+    border-radius: 1rem;
+    outline: none;
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    transition: all 0.2s;
+}
+
+.pay-input:focus {
+    border-color: var(--color-text-primary);
+    background: var(--color-bg-card);
+}
+
+.pay-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn-pay-cancel {
+    flex: 1;
+    padding: 0.875rem;
+    border: 1px solid var(--border-color);
+    background: transparent;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.btn-pay-confirm {
+    flex: 1;
+    padding: 0.875rem;
+    border: none;
+    background: #10b981;
+    /* Green for payment */
+    color: white;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-pay-confirm:hover {
+    background: #059669;
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
