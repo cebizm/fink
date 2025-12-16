@@ -8,15 +8,15 @@ export const getInitials = (name: string): string => {
 };
 
 const colors = [
-    '#EF4444', // Red 500
-    '#F97316', // Orange 500
-    '#F59E0B', // Amber 500
-    '#10B981', // Emerald 500
     '#3B82F6', // Blue 500
     '#6366F1', // Indigo 500
     '#8B5CF6', // Violet 500
-    '#EC4899', // Pink 500
-    '#14B8A6', // Teal 500
+    '#A855F7', // Purple 500
+    '#0EA5E9', // Sky 500
+    '#2563EB', // Blue 600
+    '#7C3AED', // Violet 600
+    '#4F46E5', // Indigo 600
+    '#9333EA', // Purple 600
 ];
 
 export const getAvatarColor = (name: string): string => {

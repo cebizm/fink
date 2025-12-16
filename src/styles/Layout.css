@@ -16,6 +16,25 @@
     position: relative;
 }
 
+@media (max-width: 768px) {
+    .main-content {
+        padding-top: 70px;
+        /* Slightly less spacce if navbar is smaller, or keep 80 */
+    }
+
+    .app-container {
+        padding-bottom: 80px;
+        /* Space for FAB or just general safe area */
+    }
+
+    .fab-btn {
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 56px;
+        height: 56px;
+    }
+}
+
 .fab-btn {
     position: fixed;
     bottom: 2.5rem;
