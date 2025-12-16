@@ -96,8 +96,8 @@ form {
     display: flex;
     background: var(--bg-secondary);
     /* This might be wrong too, check standard? usually var(--color-bg-secondary) */
-    background-color: #f4f4f5;
-    /* Fallback/Standard light gray */
+    background: var(--color-bg-secondary);
+    /* previously #f4f4f5 */
     padding: 0.25rem;
     border-radius: 0.75rem;
     margin-bottom: 1.5rem;
@@ -126,6 +126,7 @@ form {
 
 .type-btn.active {
     background: var(--color-bg-card);
+    border: 1px solid var(--border-color);
     /* Fixed */
     color: var(--color-text-primary);
     /* Fixed */

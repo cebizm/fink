@@ -101,7 +101,8 @@
 }
 
 .type-btn.active {
-    background-color: var(--color-bg-card);
+    background-color: var(--color-bg-primary);
+    border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     color: var(--color-text-primary);
     font-weight: 600;

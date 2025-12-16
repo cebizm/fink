@@ -160,7 +160,7 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = ({ isOpen, onClose }) =
                         </div>
                     </div>
 
-                    <button type="submit" className="submit-btn" style={{ marginTop: '1rem' }}>
+                    <button type="submit" className="btn-primary" style={{ marginTop: '1rem', width: '100%', justifyContent: 'center' }}>
                         Hedef Oluştur
                     </button>
                 </form>
