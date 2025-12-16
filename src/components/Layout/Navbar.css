@@ -356,6 +356,8 @@
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
+    flex: 1;
+    /* Ensure it takes available space to allow scrolling */
 }
 
 .mobile-menu-item {
