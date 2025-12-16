@@ -65,7 +65,7 @@
 }
 
 .nav-item:hover {
-    background-color: #f4f4f5;
+    background-color: var(--color-bg-secondary);
     color: var(--color-text-primary);
 }
 
@@ -94,7 +94,7 @@
 }
 
 .icon-btn:hover {
-    background-color: #f4f4f5;
+    background-color: var(--color-bg-secondary);
 }
 
 .user-profile {
