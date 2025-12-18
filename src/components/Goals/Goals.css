@@ -130,16 +130,15 @@
 
 .progress-bar {
     position: absolute;
-    /* Force it to fill the container exactly */
-    top: 0;
+    /* OVERFLOW-FILL: Force it to bleed 1px outside and let parent clip it for a perfect seal */
+    top: -1px;
     left: 0;
-    bottom: 0;
-    height: 100%;
+    bottom: -1px;
     background-color: #84cc16 !important;
     border-radius: 0;
-    /* Let parent clip it */
     transition: width 0.5s ease-out;
     box-shadow: none;
+    z-index: 2;
 }
 
 .contributions-list {
