@@ -77,7 +77,54 @@ export const deleteSubscriptionFromDb = async (id: string) => {
     await deleteDoc(doc(db, 'subscriptions', id));
 };
 
-// ... (Debts and Goals sections remain unchanged)
+// --- Debts ---
+export const subscribeToDebts = (userId: string, callback: (data: Debt[]) => void) => {
+    const q = query(collection(db, 'debts'), where('userId', '==', userId));
+    return onSnapshot(q, (snapshot) => {
+        const items = snapshot.docs.map(doc => convertDoc<Debt>(doc));
+        callback(items);
+    });
+};
+
+export const addDebtToDb = async (userId: string, data: Omit<Debt, 'id'>) => {
+    await addDoc(collection(db, 'debts'), {
+        ...data,
+        userId,
+        createdAt: Timestamp.now()
+    });
+};
+
+export const updateDebtInDb = async (id: string, data: Partial<Debt>) => {
+    await updateDoc(doc(db, 'debts', id), data);
+};
+
+export const deleteDebtFromDb = async (id: string) => {
+    await deleteDoc(doc(db, 'debts', id));
+};
+
+// --- Goals ---
+export const subscribeToGoals = (userId: string, callback: (data: Goal[]) => void) => {
+    const q = query(collection(db, 'goals'), where('userId', '==', userId));
+    return onSnapshot(q, (snapshot) => {
+        const items = snapshot.docs.map(doc => convertDoc<Goal>(doc));
+        callback(items);
+    });
+};
+
+export const addGoalToDb = async (userId: string, data: Omit<Goal, 'id'>) => {
+    await addDoc(collection(db, 'goals'), {
+        ...data,
+        userId,
+        createdAt: Timestamp.now()
+    });
+};
+export const updateGoalInDb = async (id: string, data: Partial<Goal>) => {
+    await updateDoc(doc(db, 'goals', id), data);
+};
+
+export const deleteGoalFromDb = async (id: string) => {
+    await deleteDoc(doc(db, 'goals', id));
+};
 
 // --- Investments ---
 export const subscribeToInvestments = (userId: string, callback: (data: Investment[]) => void) => {
