@@ -113,24 +113,26 @@
 
 .progress-container {
     height: 12px;
-    background-color: rgba(255, 255, 255, 0.2);
-    /* Semi-transparent white for dark card */
+    background-color: rgba(255, 255, 255, 0.1);
+    /* Very subtle background */
     border-radius: 999px;
     margin-bottom: 1.5rem;
     overflow: hidden;
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
-    background-color: #e4e4e7;
-    /* Zinc 200 for light card */
+    background-color: #f4f4f5;
+    /* Zinc 100 - lighter */
 }
 
 .progress-bar {
     height: 100%;
     background-color: #84cc16 !important;
-    /* Lime 500 - as in image */
+    /* Lime 500 */
     border-radius: 999px;
     transition: width 0.5s ease-out;
+    box-shadow: 0 0 10px rgba(132, 204, 22, 0.4);
+    /* Add glow to green part */
 }
 
 .contributions-list {
