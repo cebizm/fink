@@ -29,15 +29,33 @@ export const AddDebtModal: React.FC<AddDebtModalProps> = ({ isOpen, onClose }) =
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
+        const parseAmount = (val: string) => {
+            if (!val) return 0;
+            // Replace comma with dot for Turkish validation
+            const cleanVal = val.replace(',', '.');
+            const num = parseFloat(cleanVal);
+            return isNaN(num) ? 0 : num;
+        };
+
+        const parsedTotal = parseAmount(totalAmount);
+        const parsedRemaining = parseAmount(remainingAmount);
+        const parsedInstallment = parseAmount(installment);
+
+        // Basic validation
+        if (parsedTotal <= 0) {
+            alert("Lütfen geçerli bir tutar giriniz.");
+            return;
+        }
+
         addDebt({
             type,
             bankName,
             name,
-            totalAmount: parseFloat(totalAmount),
-            remainingAmount: parseFloat(remainingAmount),
+            totalAmount: parsedTotal,
+            remainingAmount: parsedRemaining,
             cutoffDate: cutoffDate ? parseInt(cutoffDate) : undefined,
             dueDate: dueDate ? parseInt(dueDate) : undefined,
-            installment: installment ? parseFloat(installment) : undefined
+            installment: parsedInstallment || undefined
         });
 
         // Reset

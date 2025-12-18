@@ -116,8 +116,14 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     const refreshMarketRates = async () => { };
 
-    const addDebt = (d: Omit<Debt, 'id'>) => {
-        if (user) addDebtToDb(user.id, d);
+    const addDebt = async (d: Omit<Debt, 'id'>) => {
+        if (!user) return;
+        try {
+            await addDebtToDb(user.id, d);
+        } catch (error) {
+            console.error("Error adding debt:", error);
+            alert("Borç eklenirken bir hata oluştu. Lütfen tekrar deneyin.");
+        }
     };
     const deleteDebt = (id: string) => deleteDebtFromDb(id);
     const updateDebt = (id: string, d: Partial<Debt>) => updateDebtInDb(id, d);
