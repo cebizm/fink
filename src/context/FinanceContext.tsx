@@ -5,10 +5,10 @@ import { getNotifications } from '../utils/notifications';
 import { useAuth } from './AuthContext';
 import {
     subscribeToTransactions, addTransactionToDb, deleteTransactionFromDb, updateTransactionInDb,
-    subscribeToSubscriptions, addSubscriptionToDb, deleteSubscriptionFromDb,
+    subscribeToSubscriptions, addSubscriptionToDb, deleteSubscriptionFromDb, updateSubscriptionInDb,
     subscribeToDebts, addDebtToDb, deleteDebtFromDb, updateDebtInDb,
     subscribeToGoals, addGoalToDb, deleteGoalFromDb, updateGoalInDb,
-    subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb
+    subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb, updateInvestmentInDb
 } from '../services/firestore';
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -79,8 +79,6 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const deleteSubscription = (id: string) => deleteSubscriptionFromDb(id);
 
     const paySubscription = (id: string) => {
-        // Logic remains similar but now operations are async DB calls
-        // Since we have real-time listeners, we just make the DB request
         const sub = subscriptions.find(s => s.id === id);
         if (!sub || !user) return;
 
@@ -92,13 +90,20 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             date: new Date().toISOString()
         });
 
-        // Calculate next date UPDATE
-        // Ideally we would update the Subscription document in Firestore
-        // But for MVP we might skip 'recurring logic' implementation on backend
-        // Let's implement basic update logic here locally then simple DB update?
-        // No, updateSubscriptionInDb is missing in service. 
-        // For now, let's just log the transaction. 
-        // Ideally we'd need updateSubscriptionInDb(id, { nextPaymentDate: ... })
+        // Calculate next date (Simple +1 month logic for now, or based on frequency)
+        const currentNextDate = new Date(sub.nextPaymentDate);
+        let nextDate = new Date(currentNextDate);
+
+        if (sub.frequency === 'weekly') {
+            nextDate.setDate(nextDate.getDate() + 7);
+        } else if (sub.frequency === 'yearly') {
+            nextDate.setFullYear(nextDate.getFullYear() + 1);
+        } else {
+            // Default to monthly
+            nextDate.setMonth(nextDate.getMonth() + 1);
+        }
+
+        updateSubscriptionInDb(sub.id, { nextPaymentDate: nextDate.toISOString() });
     };
 
     const addInvestment = (i: Omit<Investment, 'id'>) => {
@@ -106,8 +111,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
     const deleteInvestment = (id: string) => deleteInvestmentFromDb(id);
     const updateInvestmentPrice = (id: string, newPrice: number) => {
-        // Missing update implementation in service, skip for now or add later
-        console.log("Update investment not connected to DB yet", id, newPrice);
+        updateInvestmentInDb(id, { currentPrice: newPrice });
     };
 
     const refreshMarketRates = async () => { };
@@ -165,10 +169,10 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         // Calculate new state
         const updatedParticipants = goal.participants.map(p =>
             p.id === participantId
-                ? { ...p, totalContributed: p.totalContributed + amount }
+                ? { ...p, totalContributed: (p.totalContributed || 0) + amount }
                 : p
         );
-        const newCurrentAmount = updatedParticipants.reduce((sum, p) => sum + p.totalContributed, 0);
+        const newCurrentAmount = updatedParticipants.reduce((sum, p) => sum + (p.totalContributed || 0), 0);
         const newStatus = newCurrentAmount >= goal.targetAmount ? 'completed' : 'active';
 
         // Update DB
