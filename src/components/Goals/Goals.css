@@ -113,28 +113,30 @@
 
 .progress-container {
     height: 12px;
-    background-color: transparent;
-    /* Track is invisible, only green bar shows */
+    background-color: rgba(255, 255, 255, 0.08);
+    /* Very subtle fill instead of border */
     border-radius: 999px;
     margin-bottom: 1.5rem;
     overflow: hidden;
-    border: 1px solid var(--border-color);
-    /* Add subtle border to define the area */
+    padding: 0;
+    /* Ensure no padding */
+    border: none;
+    /* Remove border to fix "gap" illusion */
+    display: flex;
+    /* Flex ensures child fills height */
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
     background-color: #f4f4f5;
-    /* Zinc 100 - lighter */
 }
 
 .progress-bar {
     height: 100%;
     background-color: #84cc16 !important;
-    /* Lime 500 */
     border-radius: 999px;
     transition: width 0.5s ease-out;
-    box-shadow: 0 0 10px rgba(132, 204, 22, 0.4);
-    /* Add glow to green part */
+    box-shadow: none;
+    /* Remove shadow to ensure clean flat look */
 }
 
 .contributions-list {
