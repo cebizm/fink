@@ -136,7 +136,8 @@
     bottom: 0;
     height: 100%;
     background-color: #84cc16 !important;
-    border-radius: 999px;
+    border-radius: 0;
+    /* Let parent clip it */
     transition: width 0.5s ease-out;
     box-shadow: none;
 }
