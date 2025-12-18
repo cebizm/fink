@@ -114,16 +114,14 @@
 .progress-container {
     height: 12px;
     background-color: rgba(255, 255, 255, 0.08);
-    /* Very subtle fill instead of border */
     border-radius: 999px;
     margin-bottom: 1.5rem;
     overflow: hidden;
     padding: 0;
-    /* Ensure no padding */
     border: none;
-    /* Remove border to fix "gap" illusion */
-    display: flex;
-    /* Flex ensures child fills height */
+    position: relative;
+    /* Needed for absolute positioning of child */
+    width: 100%;
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
@@ -131,12 +129,16 @@
 }
 
 .progress-bar {
+    position: absolute;
+    /* Force it to fill the container exactly */
+    top: 0;
+    left: 0;
+    bottom: 0;
     height: 100%;
     background-color: #84cc16 !important;
     border-radius: 999px;
     transition: width 0.5s ease-out;
     box-shadow: none;
-    /* Remove shadow to ensure clean flat look */
 }
 
 .contributions-list {
