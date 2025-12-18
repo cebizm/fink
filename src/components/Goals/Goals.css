@@ -135,16 +135,17 @@
 }
 
 .progress-bar {
-    position: relative;
-    /* Back to relative flow within flex */
-    height: 100%;
+    position: absolute;
+    top: -10%;
+    bottom: -10%;
+    left: 0;
+    height: 120%;
+    /* Taller than parent */
     background-color: #84cc16 !important;
     border-radius: 0;
-    /* Let parent overflow hide corners */
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: none;
-    /* Ensure no sub-pixel gaps by scaling slightly? No, stick to flex stretch */
-    flex-shrink: 0;
+    z-index: 2;
 }
 
 .contributions-list {
