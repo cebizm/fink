@@ -88,8 +88,13 @@ export const subscribeToDebts = (userId: string, callback: (data: Debt[]) => voi
 };
 
 export const addDebtToDb = async (userId: string, data: Omit<Debt, 'id'>) => {
+    // Remove undefined fields to prevent Firestore "Unsupported field value: undefined" error
+    const cleanData = Object.fromEntries(
+        Object.entries(data).filter(([_, v]) => v !== undefined)
+    );
+
     await addDoc(collection(db, 'debts'), {
-        ...data,
+        ...cleanData,
         userId,
         createdAt: Timestamp.now()
     });
