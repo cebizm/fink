@@ -112,16 +112,22 @@
 }
 
 .progress-container {
-    height: 12px;
+    height: 14px;
+    /* Slightly taller to ensure visibility */
     background-color: rgba(255, 255, 255, 0.08);
     border-radius: 999px;
     margin-bottom: 1.5rem;
     overflow: hidden;
-    padding: 0;
-    border: none;
+    display: flex;
+    /* Use flex to control child sizing exactly */
+    align-items: center;
+    /* Center horizontally */
     position: relative;
-    /* Needed for absolute positioning of child */
     width: 100%;
+    /* GPU acceleration fix for clipping bugs */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    z-index: 1;
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
@@ -129,16 +135,16 @@
 }
 
 .progress-bar {
-    position: absolute;
-    /* OVERFLOW-FILL: Force it to bleed 1px outside and let parent clip it for a perfect seal */
-    top: -1px;
-    left: 0;
-    bottom: -1px;
+    position: relative;
+    /* Back to relative flow within flex */
+    height: 100%;
     background-color: #84cc16 !important;
     border-radius: 0;
-    transition: width 0.5s ease-out;
+    /* Let parent overflow hide corners */
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: none;
-    z-index: 2;
+    /* Ensure no sub-pixel gaps by scaling slightly? No, stick to flex stretch */
+    flex-shrink: 0;
 }
 
 .contributions-list {
