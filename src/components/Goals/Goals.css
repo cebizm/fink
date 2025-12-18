@@ -113,11 +113,13 @@
 
 .progress-container {
     height: 12px;
-    background-color: rgba(255, 255, 255, 0.05);
-    /* Extremely subtle background - almost invisible */
+    background-color: transparent;
+    /* Track is invisible, only green bar shows */
     border-radius: 999px;
     margin-bottom: 1.5rem;
     overflow: hidden;
+    border: 1px solid var(--border-color);
+    /* Add subtle border to define the area */
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
