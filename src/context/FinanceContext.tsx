@@ -224,6 +224,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         addInvestment, deleteInvestment, updateInvestmentPrice,
         refreshMarketRates, isLoadingRates,
         goals, addGoal, deleteGoal, addContribution,
+        goalInvitations,
+        acceptInvitation: handleAcceptInvitation,
+        rejectInvitation: handleRejectInvitation,
         totalBalance, monthlyIncome, monthlyExpenses, notifications,
         isPrivacyMode, togglePrivacyMode
     };
