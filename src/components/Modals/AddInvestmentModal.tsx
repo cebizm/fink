@@ -160,7 +160,7 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
                         <div className="type-buttons">
                             <button type="button" className={`type-btn ${type === 'currency' ? 'active' : ''}`} onClick={() => setType('currency')}>Döviz</button>
                             <button type="button" className={`type-btn ${type === 'gold' ? 'active' : ''}`} onClick={() => setType('gold')}>Altın</button>
-                            <button type="button" className={`type-btn ${type === 'stock' ? 'active' : ''}`} onClick={() => setType('stock')}>Hisse</button>
+                            <button type="button" className={`type-btn ${type === 'stock' ? 'active' : ''}`} onClick={() => setType('stock')} disabled={true} style={{ opacity: 0.5, cursor: 'not-allowed' }} title="Bu özellik yakında gelecek! 🚀">Hisse 🚀</button>
                             <button type="button" className={`type-btn ${type === 'deposit' ? 'active' : ''}`} onClick={() => setType('deposit')}>Mevduat</button>
                         </div>
                     </div>
