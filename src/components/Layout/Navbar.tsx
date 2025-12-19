@@ -5,6 +5,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { useFinance } from '../../context/FinanceContext';
 import { useAuth } from '../../context/AuthContext';
 import { PayDebtModal } from '../Modals/PayDebtModal';
+import { GoalInvitationModal } from '../Modals/GoalInvitationModal';
 import { VerifiedBadge } from '../Common/VerifiedBadge';
 import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 import './Navbar.css';
@@ -21,11 +22,13 @@ const navItems = [
 
 export const Navbar: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
-    const { notifications, paySubscription } = useFinance();
+    const { notifications, paySubscription, goalInvitations } = useFinance();
     const { user, logout } = useAuth();
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [payModalDebtId, setPayModalDebtId] = useState<string | null>(null);
+    const [invitationModalOpen, setInvitationModalOpen] = useState(false);
+    const [selectedInvitationId, setSelectedInvitationId] = useState<string | null>(null);
     const location = useLocation();
 
     // Close menu on route change
@@ -119,21 +122,38 @@ export const Navbar: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 {notif.itemType !== 'system' && (
-                                                    <button
-                                                        className="btn-pay-sm"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            if (notif.itemType === 'debt') {
-                                                                setPayModalDebtId(notif.itemId);
-                                                            } else if (notif.itemType === 'subscription') {
-                                                                if (confirm(`${notif.message}\nBunu ödendi olarak işaretlemek istiyor musunuz?`)) {
-                                                                    paySubscription(notif.itemId);
-                                                                }
-                                                            }
-                                                        }}
-                                                    >
-                                                        Öde
-                                                    </button>
+                                                    <>
+                                                        {notif.type === 'goal_invitation' ? (
+                                                            <button
+                                                                className="btn-pay-sm"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setSelectedInvitationId(notif.invitationId || notif.itemId);
+                                                                    setInvitationModalOpen(true);
+                                                                    setIsNotifOpen(false);
+                                                                }}
+                                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}
+                                                            >
+                                                                Görüntüle
+                                                            </button>
+                                                        ) : (
+                                                            <button
+                                                                className="btn-pay-sm"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    if (notif.itemType === 'debt') {
+                                                                        setPayModalDebtId(notif.itemId);
+                                                                    } else if (notif.itemType === 'subscription') {
+                                                                        if (confirm(`${notif.message}\nBunu ödendi olarak işaretlemek istiyor musunuz?`)) {
+                                                                            paySubscription(notif.itemId);
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Öde
+                                                            </button>
+                                                        )}
+                                                    </>
                                                 )}
                                             </div>
                                         ))
@@ -224,6 +244,15 @@ export const Navbar: React.FC = () => {
                 isOpen={!!payModalDebtId}
                 debtId={payModalDebtId}
                 onClose={() => setPayModalDebtId(null)}
+            />
+
+            <GoalInvitationModal
+                isOpen={invitationModalOpen}
+                invitation={goalInvitations.find(inv => inv.id === selectedInvitationId) || null}
+                onClose={() => {
+                    setInvitationModalOpen(false);
+                    setSelectedInvitationId(null);
+                }}
             />
         </nav >
     );
