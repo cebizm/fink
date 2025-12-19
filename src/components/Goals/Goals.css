@@ -112,22 +112,15 @@
 }
 
 .progress-container {
-    height: 14px;
-    /* Slightly taller to ensure visibility */
-    background-color: rgba(255, 255, 255, 0.08);
+    height: 12px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 999px;
     margin-bottom: 1.5rem;
-    overflow: hidden;
-    display: flex;
-    /* Use flex to control child sizing exactly */
-    align-items: center;
-    /* Center horizontally */
     position: relative;
-    width: 100%;
-    /* GPU acceleration fix for clipping bugs */
-    transform: translateZ(0);
-    -webkit-transform: translateZ(0);
-    z-index: 1;
+    overflow: hidden;
+    padding: 0;
+    border: none;
 }
 
 [data-theme='light'] .goal-card:not(.active) .progress-container {
@@ -136,16 +129,13 @@
 
 .progress-bar {
     position: absolute;
-    top: -10%;
-    bottom: -10%;
+    top: 0;
     left: 0;
-    height: 120%;
-    /* Taller than parent */
+    height: 100%;
     background-color: #84cc16 !important;
-    border-radius: 0;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 999px;
+    transition: width 0.5s ease-out;
     box-shadow: none;
-    z-index: 2;
 }
 
 .contributions-list {
