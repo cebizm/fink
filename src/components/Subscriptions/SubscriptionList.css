@@ -179,12 +179,11 @@
 }
 
 .sub-cost {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: var(--color-text-primary);
-    word-break: break-word;
-    max-width: 120px;
-    text-align: right;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .btn-icon-danger {
