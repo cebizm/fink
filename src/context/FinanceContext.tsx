@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import type { Transaction, Subscription, Investment, Debt, Goal, FinanceContextType, Notification } from '../types';
+import type { Transaction, Subscription, Investment, Debt, Goal, FinanceContextType, Notification, GoalInvitation } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { getNotifications } from '../utils/notifications';
 import { useAuth } from './AuthContext';
@@ -8,7 +8,8 @@ import {
     subscribeToSubscriptions, addSubscriptionToDb, deleteSubscriptionFromDb, updateSubscriptionInDb,
     subscribeToDebts, addDebtToDb, deleteDebtFromDb, updateDebtInDb,
     subscribeToGoals, addGoalToDb, deleteGoalFromDb, updateGoalInDb,
-    subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb, updateInvestmentInDb
+    subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb, updateInvestmentInDb,
+    subscribeToGoalInvitations, acceptGoalInvitation, rejectGoalInvitation
 } from '../services/firestore';
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -22,6 +23,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [investments, setInvestments] = useState<Investment[]>([]);
     const [debts, setDebts] = useState<Debt[]>([]);
     const [goals, setGoals] = useState<Goal[]>([]);
+    const [goalInvitations, setGoalInvitations] = useState<GoalInvitation[]>([]);
     const [isPrivacyMode, setIsPrivacyMode] = useState<boolean>(false);
     const [systemNotifications] = useState<Notification[]>([]);
     const [isLoadingRates] = useState<boolean>(false);
@@ -35,6 +37,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             setInvestments([]);
             setDebts([]);
             setGoals([]);
+            setGoalInvitations([]);
             return;
         }
 
@@ -43,6 +46,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const unsubDebts = subscribeToDebts(user.id, setDebts);
         const unsubGoals = subscribeToGoals(user.id, setGoals);
         const unsubInvest = subscribeToInvestments(user.id, setInvestments);
+        const unsubInvitations = subscribeToGoalInvitations(user.id, setGoalInvitations);
 
         return () => {
             unsubTrans();
@@ -50,6 +54,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             unsubDebts();
             unsubGoals();
             unsubInvest();
+            unsubInvitations();
         };
     }, [user]);
 

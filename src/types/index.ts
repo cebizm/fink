@@ -150,9 +150,14 @@ export interface FinanceContextType {
 
   // Goals
   goals: Goal[];
-  addGoal: (goal: Omit<Goal, 'id' | 'currentAmount' | 'status' | 'participants'> & { participants: string[] }) => void; // participants as names array for creation
+  addGoal: (goal: Omit<Goal, 'id' | 'currentAmount' | 'status' | 'participants'> & { participants: string[] }) => void;
   deleteGoal: (id: string) => void;
   addContribution: (goalId: string, participantId: string, amount: number) => void;
+
+  // Goal Invitations
+  goalInvitations: GoalInvitation[];
+  acceptInvitation: (invitationId: string) => Promise<void>;
+  rejectInvitation: (invitationId: string, inviterUserId: string, inviterName: string, goalTitle: string) => Promise<void>;
 
   totalBalance: number;
   monthlyIncome: number;
