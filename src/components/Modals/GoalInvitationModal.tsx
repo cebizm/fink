@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, CheckCircle, XCircle } from 'lucide-react';
-import { GoalInvitation } from '../../types';
+import type { GoalInvitation } from '../../types';
 import { acceptGoalInvitation, rejectGoalInvitation } from '../../services/firestore';
 import './AddTransactionModal.css';
 
@@ -37,7 +37,7 @@ export const GoalInvitationModal: React.FC<GoalInvitationModalProps> = ({ isOpen
             await rejectGoalInvitation(
                 invitation.id,
                 invitation.inviterId,
-                invitation.inviteeName || invitation.inviteeEmail,
+                invitation.inviteeEmail,
                 invitation.goalData.title
             );
             alert('Davet reddedildi');
