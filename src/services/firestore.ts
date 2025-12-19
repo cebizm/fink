@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 // Force Rebuild for Vercel - Fix Debts
-import type { Transaction, Subscription, Debt, Goal, Investment, User, SupportTicket } from '../types';
+import type { Transaction, Subscription, Debt, Goal, Investment, User, SupportTicket, GoalInvitation } from '../types';
 
 // Generic helper to convert Firestore data to our app types
 const convertDoc = <T>(doc: any): T => {

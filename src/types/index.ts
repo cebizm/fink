@@ -48,16 +48,37 @@ export interface Debt {
   installment?: number; // Monthly installment amount
 }
 
-export type NotificationType = 'upcoming' | 'overdue';
+export type NotificationType = 'upcoming' | 'overdue' | 'goal_invitation' | 'goal_invitation_rejected';
 
 export interface Notification {
   id: string;
   type: NotificationType;
   message: string;
   itemId: string;
-  itemType: 'subscription' | 'debt' | 'system';
+  itemType: 'subscription' | 'debt' | 'system' | 'goal_invitation';
   daysDiff: number;
   date: string;
+  // For goal invitations
+  invitationId?: string;
+  inviterName?: string;
+  goalTitle?: string;
+}
+
+export interface GoalInvitation {
+  id: string;
+  inviterId: string;
+  inviterEmail: string;
+  inviterName: string;
+  inviteeEmail: string;
+  inviteeId?: string;
+  goalData: {
+    title: string;
+    targetAmount: number;
+    deadline: string;
+  };
+  status: 'pending' | 'accepted' | 'rejected';
+  createdAt: any; // Firestore Timestamp
+  respondedAt?: any;
 }
 
 export interface User {
