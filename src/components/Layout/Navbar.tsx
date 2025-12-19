@@ -111,7 +111,7 @@ export const Navbar: React.FC = () => {
                                 <div className="popover-content">
                                     {notifications.length > 0 ? (
                                         notifications.map((notif) => (
-                                            <div key={notif.id} className={`notification-item ${notif.type}`}>
+                                            <div key={notif.id} className={`notification-item ${notif.type}`} style={{ position: 'relative', paddingRight: '2.5rem' }}>
                                                 <div className="notif-content-left" style={{ display: 'flex', gap: '1rem', flex: 1 }}>
                                                     <div className="notif-icon">
                                                         {notif.type === 'upcoming' ? <CalendarClock size={16} /> : <Receipt size={16} />}
@@ -121,25 +121,36 @@ export const Navbar: React.FC = () => {
                                                         <p className="notif-date">{new Date(notif.date).toLocaleDateString('tr-TR')}</p>
                                                     </div>
                                                 </div>
-                                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            clearNotification(notif.id);
-                                                        }}
-                                                        style={{
-                                                            background: 'none',
-                                                            border: 'none',
-                                                            color: 'var(--color-text-muted)',
-                                                            cursor: 'pointer',
-                                                            padding: '0.25rem',
-                                                            display: 'flex',
-                                                            alignItems: 'center'
-                                                        }}
-                                                        title="Bildirimi sil"
-                                                    >
-                                                        <X size={14} />
-                                                    </button>
+
+                                                {/* X button - fixed position on right */}
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        clearNotification(notif.id);
+                                                    }}
+                                                    style={{
+                                                        position: 'absolute',
+                                                        top: '50%',
+                                                        right: '0.75rem',
+                                                        transform: 'translateY(-50%)',
+                                                        background: 'none',
+                                                        border: 'none',
+                                                        color: 'var(--color-text-muted)',
+                                                        cursor: 'pointer',
+                                                        padding: '0.5rem',
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        opacity: 0.6,
+                                                        transition: 'opacity 0.2s'
+                                                    }}
+                                                    onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                                                    onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
+                                                    title="Bildirimi sil"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+
+                                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
                                                     {notif.itemType !== 'system' && (
                                                         <>
                                                             {notif.type === 'goal_invitation' ? (

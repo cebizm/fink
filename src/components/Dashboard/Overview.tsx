@@ -4,7 +4,7 @@ import { ArrowUpRight, ArrowDownRight, Wallet, AlertCircle, TrendingUp, Trending
 import './Overview.css';
 
 export const Overview: React.FC = () => {
-    const { totalBalance, monthlyIncome, monthlyExpenses, transactions, notifications, paySubscription, isPrivacyMode, togglePrivacyMode } = useFinance();
+    const { totalBalance, monthlyIncome, monthlyExpenses, transactions, notifications, paySubscription, clearNotification, isPrivacyMode, togglePrivacyMode } = useFinance();
 
     // Get recent transactions (last 5)
     const recentTransactions = transactions
@@ -101,11 +101,36 @@ export const Overview: React.FC = () => {
                     {notifications.length > 0 ? (
                         <div className="notification-list">
                             {notifications.map(n => (
-                                <div key={n.id} className={`notification-item ${n.type}`}>
+                                <div key={n.id} className={`notification-item ${n.type}`} style={{ position: 'relative', paddingRight: '2.5rem' }}>
                                     <div className="notif-content">
                                         <AlertCircle size={20} className="notif-icon" />
                                         <p>{n.message}</p>
                                     </div>
+
+                                    <button
+                                        onClick={() => clearNotification(n.id)}
+                                        style={{
+                                            position: 'absolute',
+                                            top: '50%',
+                                            right: '0.75rem',
+                                            transform: 'translateY(-50%)',
+                                            background: 'none',
+                                            border: 'none',
+                                            color: 'var(--color-text-muted)',
+                                            cursor: 'pointer',
+                                            padding: '0.5rem',
+                                            fontSize: '1.2rem',
+                                            lineHeight: 1,
+                                            opacity: 0.6,
+                                            transition: 'opacity 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                                        onMouseLeave={(e) => e.currentTarget.style.opacity = '0.6'}
+                                        title="Bildirimi sil"
+                                    >
+                                        ×
+                                    </button>
+
                                     {(n.type === 'upcoming' || n.type === 'overdue') && n.itemType !== 'system' ? (
                                         <button
                                             className="btn-pay-xs"
