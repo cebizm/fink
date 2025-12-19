@@ -126,9 +126,21 @@ export const Investments: React.FC = () => {
             <div className="investments-grid">
                 {filteredInvestments.length === 0 ? (
                     <div className="empty-state">
-                        <Wallet size={48} className="text-muted" />
-                        <p>Henüz bir varlık eklenmemiş.</p>
-                        <button className="btn-text" onClick={() => setIsModalOpen(true)}>Hemen Ekle</button>
+                        {filter === 'stock' ? (
+                            <>
+                                <div style={{ fontSize: '3rem', marginBottom: '0.5rem' }}>🚀</div>
+                                <p style={{ fontSize: '1rem', fontWeight: 600 }}>Bu Özellik Çok Yakında Gelecek!</p>
+                                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                    Borsa verilerini gerçek zamanlı takip edebileceksiniz.
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <Wallet size={48} className="text-muted" />
+                                <p>Henüz bir varlık eklenmemiş.</p>
+                                <button className="btn-text" onClick={() => setIsModalOpen(true)}>Hemen Ekle</button>
+                            </>
+                        )}
                     </div>
                 ) : (
                     filteredInvestments.map((inv) => {
