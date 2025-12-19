@@ -110,6 +110,26 @@ export const Goals: React.FC = () => {
                                 }}></div>
                             </div>
 
+                            {/* Show contributions if shared goal */}
+                            {goal.participants && goal.participants.length > 1 && (
+                                <div style={{ marginBottom: '1rem' }}>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
+                                        Katkılar
+                                    </div>
+                                    {goal.participants.map((participant) => (
+                                        <div key={participant.id} style={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            fontSize: '0.875rem',
+                                            marginBottom: '0.25rem'
+                                        }}>
+                                            <span style={{ fontWeight: '500' }}>{participant.name}</span>
+                                            <span style={{ fontWeight: '700' }}>{formatCurrency(participant.totalContributed)}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             <div className="card-footer">
                                 {isCompleted ? (
                                     <div className="completed-badge">
