@@ -229,3 +229,125 @@ export const updateUserPremiumStatus = async (userId: string, isPremium: boolean
     await updateDoc(doc(db, 'users', userId), { isPremium });
 };
 
+// --- Goal Invitations ---
+export const findUserByEmail = async (email: string): Promise<User | null> => {
+    const q = query(collection(db, 'users'), where('email', '==', email));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return null;
+    return convertDoc<User>(snapshot.docs[0]);
+};
+
+export const createGoalInvitation = async (data: {
+    inviterId: string;
+    inviterEmail: string;
+    inviterName: string;
+    inviteeEmail: string;
+    inviteeId: string;
+    goalData: {
+        title: string;
+        targetAmount: number;
+        deadline: string;
+    };
+}): Promise<string> => {
+    const invitationRef = await addDoc(collection(db, 'goalInvitations'), {
+        ...data,
+        status: 'pending',
+        createdAt: Timestamp.now(),
+    });
+
+    // Create notification for invitee
+    await addDoc(collection(db, 'notifications'), {
+        userId: data.inviteeId,
+        type: 'goal_invitation',
+        message: `${data.inviterName} seni '${data.goalData.title}' hedefine davet etti`,
+        itemId: invitationRef.id,
+        itemType: 'goal_invitation',
+        invitationId: invitationRef.id,
+        inviterName: data.inviterName,
+        goalTitle: data.goalData.title,
+        date: new Date().toISOString(),
+        daysDiff: 0,
+        createdAt: Timestamp.now()
+    });
+
+    return invitationRef.id;
+};
+
+export const subscribeToGoalInvitations = (userId: string, callback: (invitations: GoalInvitation[]) => void) => {
+    const q = query(
+        collection(db, 'goalInvitations'),
+        where('inviteeId', '==', userId),
+        where('status', '==', 'pending')
+    );
+    return onSnapshot(q, snapshot => {
+        const invitations = snapshot.docs.map(doc => convertDoc<GoalInvitation>(doc));
+        callback(invitations);
+    });
+};
+
+export const acceptGoalInvitation = async (invitationId: string, currentUserId: string) => {
+    // Get invitation data
+    const invitationRef = doc(db, 'goalInvitations', invitationId);
+    const invitationSnap = await getDoc(invitationRef);
+    if (!invitationSnap.exists()) throw new Error('Invitation not found');
+
+    const invitation = convertDoc<GoalInvitation>(invitationSnap);
+
+    // Create goal with both users as owners
+    const goalRef = await addDoc(collection(db, 'goals'), {
+        title: invitation.goalData.title,
+        targetAmount: invitation.goalData.targetAmount,
+        currentAmount: 0,
+        deadline: invitation.goalData.deadline,
+        status: 'active',
+        userId: invitation.inviterId, // For backward compatibility
+        participants: [
+            {
+                id: invitation.inviterId,
+                name: invitation.inviterName,
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(invitation.inviterName)}&background=random`,
+                totalContributed: 0,
+                status: 'accepted'
+            },
+            {
+                id: invitation.inviteeId,
+                name: 'Ben',
+                avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(invitation.inviteeEmail)}&background=random`,
+                totalContributed: 0,
+                status: 'accepted'
+            }
+        ],
+        createdAt: Timestamp.now()
+    });
+
+    // Update invitation status
+    await updateDoc(invitationRef, {
+        status: 'accepted',
+        respondedAt: Timestamp.now()
+    });
+
+    return goalRef.id;
+};
+
+export const rejectGoalInvitation = async (invitationId: string, inviterUserId: string, inviterName: string, goalTitle: string) => {
+    const invitationRef = doc(db, 'goalInvitations', invitationId);
+
+    // Update invitation status
+    await updateDoc(invitationRef, {
+        status: 'rejected',
+        respondedAt: Timestamp.now()
+    });
+
+    // Create rejection notification for inviter
+    await addDoc(collection(db, 'notifications'), {
+        userId: inviterUserId,
+        type: 'goal_invitation_rejected',
+        message: `${inviterName} '${goalTitle}' davetini reddetti`,
+        itemId: invitationId,
+        itemType: 'system',
+        goalTitle: goalTitle,
+        date: new Date().toISOString(),
+        daysDiff: 0,
+        createdAt: Timestamp.now()
+    });
+};
