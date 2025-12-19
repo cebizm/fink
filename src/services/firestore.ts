@@ -233,11 +233,16 @@ export const updateUserPremiumStatus = async (userId: string, isPremium: boolean
 export const subscribeToNotifications = (userId: string, callback: (notifications: import('../types').Notification[]) => void) => {
     const q = query(
         collection(db, 'notifications'),
-        where('userId', '==', userId),
-        orderBy('createdAt', 'desc')
+        where('userId', '==', userId)
     );
     return onSnapshot(q, snapshot => {
         const notifications = snapshot.docs.map(doc => convertDoc<import('../types').Notification>(doc));
+        // Sort in memory by date to avoid Firestore index requirement
+        notifications.sort((a, b) => {
+            const aTime = new Date(a.date).getTime();
+            const bTime = new Date(b.date).getTime();
+            return bTime - aTime; // Descending order (newest first)
+        });
         callback(notifications);
     });
 };
