@@ -181,7 +181,7 @@ export const TransactionList: React.FC = () => {
                 {finalFilteredTransactions.length > 0 ? (
                     <div className="full-transaction-list">
                         {finalFilteredTransactions.map((t) => (
-                            <div key={t.id} className="transaction-row group">
+                            <div key={t.id} className="transaction-row group" style={{ alignItems: 'center' }}>
                                 <div className={`row-icon ${t.type}`}>
                                     {t.type === 'income' ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                                 </div>
