@@ -182,6 +182,9 @@
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--color-text-primary);
+    word-break: break-word;
+    max-width: 120px;
+    text-align: right;
 }
 
 .btn-icon-danger {
