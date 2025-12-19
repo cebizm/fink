@@ -92,11 +92,22 @@ export const Goals: React.FC = () => {
                                 <div className="target-amount">/ {formatCurrency(goal.targetAmount)}</div>
                             </div>
 
-                            <div className="progress-container">
-                                <div
-                                    className="progress-bar"
-                                    style={{ width: `${percentage}%` }}
-                                ></div>
+                            {/* Ultra-simple progress bar */}
+                            <div style={{
+                                width: '100%',
+                                height: '8px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                borderRadius: '999px',
+                                overflow: 'hidden',
+                                marginBottom: '1.5rem'
+                            }}>
+                                <div style={{
+                                    width: `${percentage}%`,
+                                    height: '100%',
+                                    backgroundColor: '#84cc16',
+                                    borderRadius: '999px',
+                                    transition: 'width 0.5s ease-out'
+                                }}></div>
                             </div>
 
                             <div className="card-footer">
