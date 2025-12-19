@@ -161,6 +161,9 @@ export interface FinanceContextType {
   acceptInvitation: (invitationId: string) => Promise<void>;
   rejectInvitation: (invitationId: string, inviterUserId: string, inviterName: string, goalTitle: string) => Promise<void>;
 
+  // Notifications
+  clearNotification: (notificationId: string) => Promise<void>;
+
   totalBalance: number;
   monthlyIncome: number;
   monthlyExpenses: number;

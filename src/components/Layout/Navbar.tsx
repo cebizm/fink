@@ -22,7 +22,7 @@ const navItems = [
 
 export const Navbar: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
-    const { notifications, paySubscription, goalInvitations } = useFinance();
+    const { notifications, paySubscription, goalInvitations, clearNotification } = useFinance();
     const { user, logout } = useAuth();
     const [isNotifOpen, setIsNotifOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -121,40 +121,60 @@ export const Navbar: React.FC = () => {
                                                         <p className="notif-date">{new Date(notif.date).toLocaleDateString('tr-TR')}</p>
                                                     </div>
                                                 </div>
-                                                {notif.itemType !== 'system' && (
-                                                    <>
-                                                        {notif.type === 'goal_invitation' ? (
-                                                            <button
-                                                                className="btn-pay-sm"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    setSelectedInvitationId(notif.invitationId || notif.itemId);
-                                                                    setInvitationModalOpen(true);
-                                                                    setIsNotifOpen(false);
-                                                                }}
-                                                                style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}
-                                                            >
-                                                                Görüntüle
-                                                            </button>
-                                                        ) : (
-                                                            <button
-                                                                className="btn-pay-sm"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    if (notif.itemType === 'debt') {
-                                                                        setPayModalDebtId(notif.itemId);
-                                                                    } else if (notif.itemType === 'subscription') {
-                                                                        if (confirm(`${notif.message}\nBunu ödendi olarak işaretlemek istiyor musunuz?`)) {
-                                                                            paySubscription(notif.itemId);
+                                                <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            clearNotification(notif.id);
+                                                        }}
+                                                        style={{
+                                                            background: 'none',
+                                                            border: 'none',
+                                                            color: 'var(--color-text-muted)',
+                                                            cursor: 'pointer',
+                                                            padding: '0.25rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center'
+                                                        }}
+                                                        title="Bildirimi sil"
+                                                    >
+                                                        <X size={14} />
+                                                    </button>
+                                                    {notif.itemType !== 'system' && (
+                                                        <>
+                                                            {notif.type === 'goal_invitation' ? (
+                                                                <button
+                                                                    className="btn-pay-sm"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        setSelectedInvitationId(notif.invitationId || notif.itemId);
+                                                                        setInvitationModalOpen(true);
+                                                                        setIsNotifOpen(false);
+                                                                    }}
+                                                                    style={{ fontSize: '0.75rem', padding: '0.4rem 0.8rem' }}
+                                                                >
+                                                                    Görüntüle
+                                                                </button>
+                                                            ) : (
+                                                                <button
+                                                                    className="btn-pay-sm"
+                                                                    onClick={(e) => {
+                                                                        e.stopPropagation();
+                                                                        if (notif.itemType === 'debt') {
+                                                                            setPayModalDebtId(notif.itemId);
+                                                                        } else if (notif.itemType === 'subscription') {
+                                                                            if (confirm(`${notif.message}\nBunu ödendi olarak işaretlemek istiyor musunuz?`)) {
+                                                                                paySubscription(notif.itemId);
+                                                                            }
                                                                         }
-                                                                    }
-                                                                }}
-                                                            >
-                                                                Öde
-                                                            </button>
-                                                        )}
-                                                    </>
-                                                )}
+                                                                    }}
+                                                                >
+                                                                    Öde
+                                                                </button>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         ))
                                     ) : (

@@ -10,7 +10,7 @@ import {
     subscribeToGoals, addGoalToDb, deleteGoalFromDb, updateGoalInDb,
     subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb, updateInvestmentInDb,
     subscribeToGoalInvitations, acceptGoalInvitation, rejectGoalInvitation,
-    subscribeToNotifications
+    subscribeToNotifications, deleteNotification
 } from '../services/firestore';
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -230,6 +230,14 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
+    const clearNotification = async (notificationId: string) => {
+        try {
+            await deleteNotification(notificationId);
+        } catch (error) {
+            console.error('Error deleting notification:', error);
+        }
+    };
+
     // Derived - Merge Firestore notifications with generated notifications
     const notifications = [...firestoreNotifications, ...systemNotifications, ...getNotifications(subscriptions, debts)];
     const totalBalance = transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount : acc - t.amount, 0);
@@ -252,6 +260,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         goalInvitations,
         acceptInvitation: handleAcceptInvitation,
         rejectInvitation: handleRejectInvitation,
+        clearNotification,
         totalBalance, monthlyIncome, monthlyExpenses, notifications,
         isPrivacyMode, togglePrivacyMode
     };

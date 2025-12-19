@@ -253,6 +253,10 @@ export const subscribeToNotifications = (userId: string, callback: (notification
     });
 };
 
+export const deleteNotification = async (notificationId: string) => {
+    await deleteDoc(doc(db, 'notifications', notificationId));
+};
+
 // --- Goal Invitations ---
 export const findUserByEmail = async (email: string): Promise<User | null> => {
     const q = query(collection(db, 'users'), where('email', '==', email));
@@ -335,7 +339,7 @@ export const acceptGoalInvitation = async (invitationId: string) => {
             },
             {
                 id: invitation.inviteeId,
-                name: 'Ben',
+                name: invitation.inviteeEmail.split('@')[0], // Use email username instead of 'Ben'
                 avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(invitation.inviteeEmail)}&background=random`,
                 totalContributed: 0,
                 status: 'accepted'
