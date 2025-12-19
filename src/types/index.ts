@@ -126,6 +126,7 @@ export interface Goal {
   deadline: string; // ISO string
   participants: Participant[];
   status: 'active' | 'completed';
+  userId?: string; // For backward compatibility with legacy single-user goals
 }
 
 export interface FinanceContextType {

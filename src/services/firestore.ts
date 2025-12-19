@@ -110,10 +110,16 @@ export const deleteDebtFromDb = async (id: string) => {
 
 // --- Goals ---
 export const subscribeToGoals = (userId: string, callback: (data: Goal[]) => void) => {
-    const q = query(collection(db, 'goals'), where('userId', '==', userId));
+    // Get all goals and filter for ones where user is a participant
+    const q = query(collection(db, 'goals'));
     return onSnapshot(q, (snapshot) => {
-        const items = snapshot.docs.map(doc => convertDoc<Goal>(doc));
-        callback(items);
+        const allGoals = snapshot.docs.map(doc => convertDoc<Goal>(doc));
+        // Filter to include goals where user is participant OR legacy userId owner
+        const userGoals = allGoals.filter(goal =>
+            goal.userId === userId ||
+            (goal.participants && goal.participants.some(p => p.id === userId))
+        );
+        callback(userGoals);
     });
 };
 
