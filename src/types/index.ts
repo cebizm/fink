@@ -71,6 +71,7 @@ export interface GoalInvitation {
   inviterName: string;
   inviteeEmail: string;
   inviteeId?: string;
+  goalId?: string; // ID of the goal that was created
   goalData: {
     title: string;
     targetAmount: number;

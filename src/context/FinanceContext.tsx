@@ -9,7 +9,8 @@ import {
     subscribeToDebts, addDebtToDb, deleteDebtFromDb, updateDebtInDb,
     subscribeToGoals, addGoalToDb, deleteGoalFromDb, updateGoalInDb,
     subscribeToInvestments, addInvestmentToDb, deleteInvestmentFromDb, updateInvestmentInDb,
-    subscribeToGoalInvitations, acceptGoalInvitation, rejectGoalInvitation
+    subscribeToGoalInvitations, acceptGoalInvitation, rejectGoalInvitation,
+    subscribeToNotifications
 } from '../services/firestore';
 
 const FinanceContext = createContext<FinanceContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const [debts, setDebts] = useState<Debt[]>([]);
     const [goals, setGoals] = useState<Goal[]>([]);
     const [goalInvitations, setGoalInvitations] = useState<GoalInvitation[]>([]);
+    const [firestoreNotifications, setFirestoreNotifications] = useState<Notification[]>([]); // Real-time notifications
     const [isPrivacyMode, setIsPrivacyMode] = useState<boolean>(false);
     const [systemNotifications] = useState<Notification[]>([]);
     const [isLoadingRates] = useState<boolean>(false);
@@ -38,6 +40,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             setDebts([]);
             setGoals([]);
             setGoalInvitations([]);
+            setFirestoreNotifications([]);
             return;
         }
 
@@ -47,6 +50,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const unsubGoals = subscribeToGoals(user.id, setGoals);
         const unsubInvest = subscribeToInvestments(user.id, setInvestments);
         const unsubInvitations = subscribeToGoalInvitations(user.id, setGoalInvitations);
+        const unsubNotifications = subscribeToNotifications(user.id, setFirestoreNotifications);
 
         return () => {
             unsubTrans();
@@ -55,6 +59,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             unsubGoals();
             unsubInvest();
             unsubInvitations();
+            unsubNotifications();
         };
     }, [user]);
 
@@ -225,8 +230,8 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
-    // Derived
-    const notifications = [...systemNotifications, ...getNotifications(subscriptions, debts)];
+    // Derived - Merge Firestore notifications with generated notifications
+    const notifications = [...firestoreNotifications, ...systemNotifications, ...getNotifications(subscriptions, debts)];
     const totalBalance = transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount : acc - t.amount, 0);
     const now = new Date();
     const monthlyIncome = transactions

@@ -229,6 +229,19 @@ export const updateUserPremiumStatus = async (userId: string, isPremium: boolean
     await updateDoc(doc(db, 'users', userId), { isPremium });
 };
 
+// --- Notifications ---
+export const subscribeToNotifications = (userId: string, callback: (notifications: import('../types').Notification[]) => void) => {
+    const q = query(
+        collection(db, 'notifications'),
+        where('userId', '==', userId),
+        orderBy('createdAt', 'desc')
+    );
+    return onSnapshot(q, snapshot => {
+        const notifications = snapshot.docs.map(doc => convertDoc<import('../types').Notification>(doc));
+        callback(notifications);
+    });
+};
+
 // --- Goal Invitations ---
 export const findUserByEmail = async (email: string): Promise<User | null> => {
     const q = query(collection(db, 'users'), where('email', '==', email));
