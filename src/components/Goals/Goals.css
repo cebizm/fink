@@ -116,7 +116,8 @@
     width: 100%;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 999px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    /* Reduced from 1.5rem */
     position: relative;
     overflow: hidden;
     padding: 0;
@@ -139,7 +140,8 @@
 }
 
 .contributions-list {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    /* Reduced from 1rem */
 }
 
 .contributions-title {
