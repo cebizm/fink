@@ -102,7 +102,7 @@
 
 .subscriptions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
 }
 
@@ -180,7 +180,7 @@
 }
 
 .sub-cost {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 800;
     color: var(--color-text-primary);
     white-space: nowrap;
