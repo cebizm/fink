@@ -205,6 +205,26 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     };
 
+    // Goal Invitation Actions
+    const handleAcceptInvitation = async (invitationId: string) => {
+        if (!user) return;
+        try {
+            await acceptGoalInvitation(invitationId);
+        } catch (error) {
+            console.error('Error accepting invitation:', error);
+            throw error;
+        }
+    };
+
+    const handleRejectInvitation = async (invitationId: string, inviterUserId: string, inviterName: string, goalTitle: string) => {
+        try {
+            await rejectGoalInvitation(invitationId, inviterUserId, inviterName, goalTitle);
+        } catch (error) {
+            console.error('Error rejecting invitation:', error);
+            throw error;
+        }
+    };
+
     // Derived
     const notifications = [...systemNotifications, ...getNotifications(subscriptions, debts)];
     const totalBalance = transactions.reduce((acc, t) => t.type === 'income' ? acc + t.amount : acc - t.amount, 0);

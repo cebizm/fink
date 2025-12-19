@@ -20,7 +20,7 @@ export const GoalInvitationModal: React.FC<GoalInvitationModalProps> = ({ isOpen
 
         setIsProcessing(true);
         try {
-            await acceptGoalInvitation(invitation.id, invitation.inviteeId);
+            await acceptGoalInvitation(invitation.id);
             alert(`'${invitation.goalData.title}' hedefine katıldın!`);
             onClose();
         } catch (error) {

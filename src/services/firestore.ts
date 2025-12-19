@@ -285,7 +285,7 @@ export const subscribeToGoalInvitations = (userId: string, callback: (invitation
     });
 };
 
-export const acceptGoalInvitation = async (invitationId: string, currentUserId: string) => {
+export const acceptGoalInvitation = async (invitationId: string) => {
     // Get invitation data
     const invitationRef = doc(db, 'goalInvitations', invitationId);
     const invitationSnap = await getDoc(invitationRef);
