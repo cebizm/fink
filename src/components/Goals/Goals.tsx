@@ -3,7 +3,7 @@ import { useFinance } from '../../context/FinanceContext';
 import { AddGoalModal } from '../Modals/AddGoalModal';
 import { AddContributionModal } from '../Modals/AddContributionModal';
 import './Goals.css';
-import { Plus, Target, Check, Timer, CheckCircle2, Trash2 } from 'lucide-react';
+import { Plus, Target, Check, Trash2 } from 'lucide-react';
 
 import { useAuth } from '../../context/AuthContext';
 import { FREE_TIER_LIMITS } from '../../constants/limits';
@@ -85,11 +85,6 @@ export const Goals: React.FC = () => {
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
-                                    {goal.participants.length > 1 && (
-                                        <div className="goal-shared-with" style={{ textAlign: 'left' }}>
-                                            {goal.participants.length - 1} kişi ile paylaşılıyor
-                                        </div>
-                                    )}
                                 </div>
                             </div>
                             <div className="goal-amounts" style={{ marginTop: '0.5rem', marginBottom: '1rem', textAlign: 'right' }}>
@@ -102,23 +97,6 @@ export const Goals: React.FC = () => {
                                     className="progress-bar"
                                     style={{ width: `${percentage}%` }}
                                 ></div>
-                            </div>
-
-                            <div className="contributions-list">
-                                <div className="contributions-title">Katılımcılar & Katkılar</div>
-                                {goal.participants.map((p) => (
-                                    <div key={p.id} className="contribution-item">
-                                        <span className="contribution-name" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                            {p.status === 'pending' ? (
-                                                <Timer size={14} className="text-warning" />
-                                            ) : (
-                                                <CheckCircle2 size={14} className="text-success" />
-                                            )}
-                                            {p.name}
-                                        </span>
-                                        <span className="contribution-amount">{formatCurrency(p.totalContributed)}</span>
-                                    </div>
-                                ))}
                             </div>
 
                             <div className="card-footer">
