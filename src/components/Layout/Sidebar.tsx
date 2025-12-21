@@ -1,9 +1,9 @@
 import React from 'react';
-import { LayoutDashboard, Receipt, CalendarClock, CreditCard } from 'lucide-react';
+import { Receipt, CalendarClock, CreditCard, Home } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
-const navItems = [
-    { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
+const menuItems = [
+    { icon: Home, label: 'Dashboard', path: '/dashboard' },
     { icon: Receipt, label: 'Transactions', path: '/transactions' },
     { icon: CalendarClock, label: 'Subscriptions', path: '/subscriptions' },
     { icon: CreditCard, label: 'Bills', path: '/bills' },
@@ -18,7 +18,7 @@ export const Sidebar: React.FC = () => {
             </div>
 
             <nav className="nav-menu">
-                {navItems.map((item) => (
+                {menuItems.map((item) => (
                     <NavLink
                         key={item.path}
                         to={item.path}

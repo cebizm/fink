@@ -14,6 +14,7 @@ import { Reports } from './components/Reports/Reports';
 import { Investments } from './components/Investments/Investments';
 import { Goals } from './components/Goals/Goals';
 import { Debts } from './components/Debts/Debts';
+import { Landing } from './pages/Landing';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { ForgotPassword } from './pages/ForgotPassword';
@@ -34,7 +35,7 @@ const RequireAuth = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/" state={{ from: location }} replace />;
   }
 
   return children;
@@ -76,7 +77,8 @@ function App() {
             <div className="app">
               <Toaster position="top-right" />
               <Routes>
-                {/* Public Routes */}
+                {/* Public Landing Page */}
+                <Route path="/" element={<Landing />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -88,12 +90,12 @@ function App() {
                   </AdminRoute>
                 } />
 
-                {/* Protected App Routes */}
+                {/* Protected Routes */}
                 <Route path="/*" element={
                   <RequireAuth>
                     <AppLayout>
                       <Routes>
-                        <Route path="/" element={<Overview />} />
+                        <Route path="/dashboard" element={<Overview />} />
                         <Route path="/profile" element={<Profile />} />
                         <Route path="/profile/personal" element={<PersonalInformation />} />
                         <Route path="/profile/payments" element={<PaymentMethods />} />
