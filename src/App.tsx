@@ -29,6 +29,17 @@ import { AdminDashboard } from './pages/Admin/AdminDashboard';
 import { AdminRoute } from './components/AdminRoute';
 import { Plus } from 'lucide-react';
 
+// Smart Home Route - Landing or Dashboard
+const HomeRedirect = () => {
+  const { isAuthenticated } = useAuth();
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return <Landing />;
+};
+
 // Protected Route Wrapper
 const RequireAuth = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -77,8 +88,8 @@ function App() {
             <div className="app">
               <Toaster position="top-right" />
               <Routes>
-                {/* Public Landing Page */}
-                <Route path="/" element={<Landing />} />
+                {/* Smart Home Route - Landing or Dashboard */}
+                <Route path="/" element={<HomeRedirect />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
