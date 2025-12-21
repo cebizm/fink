@@ -11,7 +11,7 @@ import { getInitials, getAvatarColor } from '../../utils/avatarUtils';
 import './Navbar.css';
 
 const navItems = [
-    { icon: LayoutDashboard, label: 'Genel Bakış', path: '/' },
+    { icon: LayoutDashboard, label: 'Genel Bakış', path: '/dashboard' },
     { icon: Receipt, label: 'İşlemler', path: '/transactions' },
     { icon: CalendarClock, label: 'Abonelikler', path: '/subscriptions' },
     { icon: Landmark, label: 'Borçlar', path: '/debts' },
