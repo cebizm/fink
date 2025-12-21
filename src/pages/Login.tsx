@@ -19,7 +19,7 @@ export const Login: React.FC = () => {
 
         try {
             await login(email, password);
-            navigate('/');
+            navigate('/dashboard');
         } catch (err: any) {
             console.error(err);
             setError('Giriş başarısız. E-posta veya şifre hatalı.');
