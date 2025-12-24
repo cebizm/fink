@@ -29,10 +29,12 @@ export interface Investment {
   id: string;
   type: InvestmentType;
   name: string; // e.g. "USD", "Gram Altın", "Apple"
-  amount: number; // Quantity
+  amount: number; // Quantity (for deposits: principal amount)
   purchasePrice: number; // Unit price at purchase
   currentPrice: number; // Current market price (user updated)
   date: string;
+  interestRate?: number; // Annual interest rate % (for deposits)
+  maturity?: number; // Days (for deposits)
 }
 
 export type DebtType = 'credit_card' | 'loan' | 'cash_advance';

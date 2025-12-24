@@ -179,22 +179,33 @@ export const Investments: React.FC = () => {
                                     <div className="inv-row">
                                         <span className="label">{inv.type === 'deposit' ? 'Ana Para' : 'Alış Fiyatı'}</span>
                                         <span className="val">
-                                            {isPrivacyMode ? '**** ₺' : `${safePurchasePrice.toLocaleString('tr-TR', { maximumFractionDigits: inv.type === 'deposit' ? 2 : 4 })} ₺`}
+                                            {isPrivacyMode
+                                                ? '**** ₺'
+                                                : inv.type === 'deposit'
+                                                    ? `${safeAmount.toLocaleString('tr-TR', { maximumFractionDigits: 2 })} ₺`
+                                                    : `${safePurchasePrice.toLocaleString('tr-TR', { maximumFractionDigits: 4 })} ₺`
+                                            }
                                         </span>
                                     </div>
                                     <div className="inv-row">
                                         <span className="label">{inv.type === 'deposit' ? 'Faiz Oranı' : 'Güncel Fiyat'}</span>
-                                        <div className="price-editor" style={{ maxWidth: 'none', width: 'auto' }}>
-                                            <input
-                                                type={isPrivacyMode ? "password" : "number"}
-                                                value={Number.isNaN(inv.currentPrice) ? '' : inv.currentPrice}
-                                                step={inv.type === 'deposit' ? '0.01' : '0.0001'}
-                                                onChange={(e) => updateInvestmentPrice(inv.id, parseFloat(e.target.value) || 0)}
-                                                className="price-input"
-                                                style={{ width: '100px', textAlign: 'right' }}
-                                            />
-                                            <span className="currency-symbol">{inv.type === 'deposit' ? '%' : '₺'}</span>
-                                        </div>
+                                        {inv.type === 'deposit' ? (
+                                            <span className="val">
+                                                %{inv.interestRate?.toLocaleString('tr-TR', { maximumFractionDigits: 2 }) || 0}
+                                            </span>
+                                        ) : (
+                                            <div className="price-editor" style={{ maxWidth: 'none', width: 'auto' }}>
+                                                <input
+                                                    type={isPrivacyMode ? "password" : "number"}
+                                                    value={Number.isNaN(inv.currentPrice) ? '' : inv.currentPrice}
+                                                    step="0.0001"
+                                                    onChange={(e) => updateInvestmentPrice(inv.id, parseFloat(e.target.value) || 0)}
+                                                    className="price-input"
+                                                    style={{ width: '100px', textAlign: 'right' }}
+                                                />
+                                                <span className="currency-symbol">₺</span>
+                                            </div>
+                                        )}
                                     </div>
                                     <hr className="divider" />
                                     <div className="inv-row total">

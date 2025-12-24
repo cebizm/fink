@@ -135,7 +135,11 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
                 amount: finalAmount,
                 purchasePrice: price,
                 currentPrice: currentPrice,
-                date: new Date().toISOString()
+                date: new Date().toISOString(),
+                ...(type === 'deposit' && {
+                    interestRate: parseFloat(interestRate) || 0,
+                    maturity: parseFloat(maturity) || 0
+                })
             });
 
             onClose();
