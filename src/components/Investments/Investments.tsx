@@ -177,23 +177,23 @@ export const Investments: React.FC = () => {
 
                                 <div className="inv-body">
                                     <div className="inv-row">
-                                        <span className="label">Alış Fiyatı</span>
+                                        <span className="label">{inv.type === 'deposit' ? 'Ana Para' : 'Alış Fiyatı'}</span>
                                         <span className="val">
-                                            {isPrivacyMode ? '**** ₺' : `${safePurchasePrice.toLocaleString('tr-TR', { maximumFractionDigits: 4 })} ₺`}
+                                            {isPrivacyMode ? '**** ₺' : `${safePurchasePrice.toLocaleString('tr-TR', { maximumFractionDigits: inv.type === 'deposit' ? 2 : 4 })} ₺`}
                                         </span>
                                     </div>
                                     <div className="inv-row">
-                                        <span className="label">Güncel Fiyat</span>
+                                        <span className="label">{inv.type === 'deposit' ? 'Faiz Oranı' : 'Güncel Fiyat'}</span>
                                         <div className="price-editor" style={{ maxWidth: 'none', width: 'auto' }}>
                                             <input
                                                 type={isPrivacyMode ? "password" : "number"}
                                                 value={Number.isNaN(inv.currentPrice) ? '' : inv.currentPrice}
-                                                step="0.0001"
+                                                step={inv.type === 'deposit' ? '0.01' : '0.0001'}
                                                 onChange={(e) => updateInvestmentPrice(inv.id, parseFloat(e.target.value) || 0)}
                                                 className="price-input"
                                                 style={{ width: '100px', textAlign: 'right' }}
                                             />
-                                            <span className="currency-symbol">₺</span>
+                                            <span className="currency-symbol">{inv.type === 'deposit' ? '%' : '₺'}</span>
                                         </div>
                                     </div>
                                     <hr className="divider" />
