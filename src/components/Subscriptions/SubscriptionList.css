@@ -132,6 +132,28 @@
     justify-content: center;
 }
 
+/* Platform Logo */
+.platform-logo {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.platform-logo img {
+    width: 26px;
+    height: 26px;
+}
+
+.platform-logo span {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+}
+
 .sub-details {
     flex: 1;
 }

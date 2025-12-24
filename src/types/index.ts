@@ -20,6 +20,7 @@ export interface Subscription {
   nextPaymentDate: string; // ISO string
   category: string;
   type: 'subscription' | 'bill';
+  platformId?: string; // Optional: links to subscriptionPlatforms
 }
 
 export type InvestmentType = 'currency' | 'gold' | 'stock' | 'deposit';

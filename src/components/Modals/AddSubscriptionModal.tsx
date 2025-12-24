@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { X } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
+import { searchPlatforms, type SubscriptionPlatform } from '../../constants/subscriptionPlatforms';
 import '../Modals/AddTransactionModal.css'; // Reuse styles
 import './AddSubscriptionModal.css';
 
@@ -18,9 +19,35 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
         nextPaymentDate: new Date().toISOString().split('T')[0],
         category: '',
         type: 'subscription' as 'subscription' | 'bill',
+        platformId: '' as string,
     });
+    const [showSuggestions, setShowSuggestions] = useState(false);
+    const [selectedPlatform, setSelectedPlatform] = useState<SubscriptionPlatform | null>(null);
+
+    // Filter suggestions based on input and type
+    const suggestions = useMemo(() => {
+        if (!formData.name || formData.name.length < 1) return [];
+        return searchPlatforms(formData.name, formData.type).slice(0, 6);
+    }, [formData.name, formData.type]);
 
     if (!isOpen) return null;
+
+    const handlePlatformSelect = (platform: SubscriptionPlatform) => {
+        setSelectedPlatform(platform);
+        setFormData({
+            ...formData,
+            name: platform.name,
+            category: platform.category,
+            platformId: platform.id,
+        });
+        setShowSuggestions(false);
+    };
+
+    const handleNameChange = (value: string) => {
+        setFormData({ ...formData, name: value, platformId: '' });
+        setSelectedPlatform(null);
+        setShowSuggestions(true);
+    };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -31,6 +58,7 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
             nextPaymentDate: formData.nextPaymentDate,
             category: formData.category,
             type: formData.type,
+            platformId: formData.platformId || undefined,
         });
         onClose();
         setFormData({
@@ -40,7 +68,24 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
             nextPaymentDate: new Date().toISOString().split('T')[0],
             category: '',
             type: 'subscription',
+            platformId: '',
         });
+        setSelectedPlatform(null);
+    };
+
+    const handleTypeChange = (type: 'subscription' | 'bill') => {
+        setFormData({ ...formData, type, name: '', category: '', platformId: '' });
+        setSelectedPlatform(null);
+    };
+
+    // Helper to check if color is light
+    const isLightColor = (hex: string) => {
+        const c = hex.replace('#', '');
+        const r = parseInt(c.substring(0, 2), 16);
+        const g = parseInt(c.substring(2, 4), 16);
+        const b = parseInt(c.substring(4, 6), 16);
+        const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 155;
     };
 
     return (
@@ -60,14 +105,14 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
                             <button
                                 type="button"
                                 className={`type-btn-lg ${formData.type === 'subscription' ? 'active' : ''}`}
-                                onClick={() => setFormData({ ...formData, type: 'subscription' })}
+                                onClick={() => handleTypeChange('subscription')}
                             >
                                 Dijital Abonelik
                             </button>
                             <button
                                 type="button"
                                 className={`type-btn-lg ${formData.type === 'bill' ? 'active' : ''}`}
-                                onClick={() => setFormData({ ...formData, type: 'bill' })}
+                                onClick={() => handleTypeChange('bill')}
                             >
                                 Fatura
                             </button>
@@ -76,14 +121,63 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
 
                     <div className="form-group">
                         <label htmlFor="name">İsim</label>
-                        <input
-                            type="text"
-                            id="name"
-                            required
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            placeholder={formData.type === 'subscription' ? "Örn. Netflix, Spotify" : "Örn. Elektrik, Su"}
-                        />
+                        <div className="autocomplete-container">
+                            {selectedPlatform && selectedPlatform.logo && (
+                                <div
+                                    className="selected-platform-icon"
+                                    style={{ backgroundColor: selectedPlatform.color }}
+                                >
+                                    <img
+                                        src={selectedPlatform.logo}
+                                        alt={selectedPlatform.name}
+                                        style={{ filter: isLightColor(selectedPlatform.color) ? 'brightness(0)' : 'brightness(0) invert(1)' }}
+                                    />
+                                </div>
+                            )}
+                            <input
+                                type="text"
+                                id="name"
+                                required
+                                value={formData.name}
+                                onChange={(e) => handleNameChange(e.target.value)}
+                                onFocus={() => setShowSuggestions(true)}
+                                onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                placeholder={formData.type === 'subscription' ? "Netflix, Spotify..." : "Elektrik, Su..."}
+                                className={selectedPlatform?.logo ? 'has-icon' : ''}
+                                autoComplete="off"
+                            />
+
+                            {showSuggestions && suggestions.length > 0 && (
+                                <div className="suggestions-dropdown">
+                                    {suggestions.map((platform) => (
+                                        <div
+                                            key={platform.id}
+                                            className="suggestion-item"
+                                            onClick={() => handlePlatformSelect(platform)}
+                                        >
+                                            <div
+                                                className="suggestion-icon"
+                                                style={{ backgroundColor: platform.color }}
+                                            >
+                                                {platform.logo ? (
+                                                    <img
+                                                        src={platform.logo}
+                                                        alt={platform.name}
+                                                        style={{ filter: isLightColor(platform.color) ? 'brightness(0)' : 'brightness(0) invert(1)' }}
+                                                    />
+                                                ) : (
+                                                    <span>{platform.name.charAt(0)}</span>
+                                                )}
+                                            </div>
+                                            <div className="suggestion-info">
+                                                <span className="suggestion-name">{platform.name}</span>
+                                                <span className="suggestion-category">{platform.category}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="form-group">
@@ -163,3 +257,4 @@ export const AddSubscriptionModal: React.FC<AddSubscriptionModalProps> = ({ isOp
         </div>
     );
 };
+

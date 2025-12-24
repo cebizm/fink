@@ -148,7 +148,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         addTransactionToDb(user.id, {
             type: 'expense',
             amount,
-            category: 'Debt Payment',
+            category: 'Borç Ödemesi',
             description: `${debt.bankName} - ${debt.name} Ödemesi`,
             date: new Date().toISOString(),
             debtId: id
@@ -203,7 +203,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             addTransactionToDb(user.id, {
                 type: 'expense',
                 amount,
-                category: 'Savings',
+                category: 'Birikim',
                 description: `${goal.title} Katkısı`,
                 date: new Date().toISOString()
             });

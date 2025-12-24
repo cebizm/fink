@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
 import { CreditCard, Calendar, Plus, Trash2, Smartphone, Zap, Droplets, Wifi, Eye, EyeOff } from 'lucide-react';
 import { AddSubscriptionModal } from '../Modals/AddSubscriptionModal';
+import { subscriptionPlatforms, findPlatformByName } from '../../constants/subscriptionPlatforms';
 import './SubscriptionList.css';
 
 export const SubscriptionList: React.FC = () => {
@@ -19,15 +20,67 @@ export const SubscriptionList: React.FC = () => {
         .filter(s => s.frequency === 'monthly')
         .reduce((acc, curr) => acc + curr.amount, 0);
 
-    const getIcon = (name: string, type: 'subscription' | 'bill') => {
+    // Get platform by ID or name
+    const getPlatform = (platformId?: string, name?: string) => {
+        if (platformId) {
+            return subscriptionPlatforms.find(p => p.id === platformId);
+        }
+        if (name) {
+            return findPlatformByName(name);
+        }
+        return undefined;
+    };
+
+    const getIcon = (sub: { name: string; type?: 'subscription' | 'bill'; platformId?: string }) => {
+        const platform = getPlatform(sub.platformId, sub.name);
+
+        // Helper to check if color is light
+        const isLightColor = (hex: string) => {
+            const c = hex.replace('#', '');
+            const r = parseInt(c.substring(0, 2), 16);
+            const g = parseInt(c.substring(2, 4), 16);
+            const b = parseInt(c.substring(4, 6), 16);
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            return brightness > 155;
+        };
+
+        if (platform && platform.logo) {
+            const lightBg = isLightColor(platform.color);
+            return (
+                <div
+                    className="platform-logo"
+                    style={{ backgroundColor: platform.color }}
+                >
+                    <img
+                        src={platform.logo}
+                        alt={platform.name}
+                        style={{ filter: lightBg ? 'brightness(0)' : 'brightness(0) invert(1)' }}
+                    />
+                </div>
+            );
+        }
+
+        if (platform && !platform.logo) {
+            return (
+                <div
+                    className="platform-logo"
+                    style={{ backgroundColor: platform.color }}
+                >
+                    <span>{platform.name.charAt(0)}</span>
+                </div>
+            );
+        }
+
+        // Fallback for bills without logos
+        const type = sub.type || 'subscription';
         if (type === 'bill') {
-            const lowerName = name.toLowerCase();
+            const lowerName = sub.name.toLowerCase();
             if (lowerName.includes('elektrik')) return <Zap size={24} />;
             if (lowerName.includes('su')) return <Droplets size={24} />;
             if (lowerName.includes('internet') || lowerName.includes('wifi')) return <Wifi size={24} />;
             if (lowerName.includes('telefon') || lowerName.includes('gsm')) return <Smartphone size={24} />;
-            return <CreditCard size={24} />;
         }
+
         return <CreditCard size={24} />;
     };
 
@@ -86,7 +139,7 @@ export const SubscriptionList: React.FC = () => {
                 {filteredSubscriptions.map((sub) => (
                     <div key={sub.id} className="card subscription-card">
                         <div className={`sub-icon ${activeTab}`}>
-                            {getIcon(sub.name, sub.type || 'subscription')}
+                            {getIcon(sub)}
                         </div>
                         <div className="sub-details">
                             <h4 className="sub-name">{sub.name}</h4>
