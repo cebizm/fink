@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Trash2, Building2, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddDebtModal } from '../Modals/AddDebtModal';
 import { PayDebtModal } from '../Modals/PayDebtModal';
@@ -32,22 +32,44 @@ export const Debts: React.FC = () => {
 
     // ... Rest of the component ...
 
-    // Bank Brand Colors & Logos
+    // Bank Brand Colors & Gradients (letter-based logos)
     const BANK_BRANDS: Record<string, { color: string, gradient: string }> = {
-        'Garanti BBVA': { color: '#25D366', gradient: 'linear-gradient(135deg, #166534 0%, #22c55e 100%)' },
-        'Garanti': { color: '#25D366', gradient: 'linear-gradient(135deg, #166534 0%, #22c55e 100%)' },
+        'Garanti BBVA': { color: '#00A650', gradient: 'linear-gradient(135deg, #166534 0%, #22c55e 100%)' },
+        'Garanti': { color: '#00A650', gradient: 'linear-gradient(135deg, #166534 0%, #22c55e 100%)' },
         'Yapı Kredi': { color: '#0047AB', gradient: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' },
         'Akbank': { color: '#FF0000', gradient: 'linear-gradient(135deg, #991b1b 0%, #ef4444 100%)' },
         'Ziraat Bankası': { color: '#E3001B', gradient: 'linear-gradient(135deg, #991b1b 0%, #e11d48 100%)' },
+        'Ziraat': { color: '#E3001B', gradient: 'linear-gradient(135deg, #991b1b 0%, #e11d48 100%)' },
         'İş Bankası': { color: '#1E3A8A', gradient: 'linear-gradient(135deg, #172554 0%, #3b82f6 100%)' },
+        'İşbank': { color: '#1E3A8A', gradient: 'linear-gradient(135deg, #172554 0%, #3b82f6 100%)' },
         'Enpara': { color: '#8B5CF6', gradient: 'linear-gradient(135deg, #6d28d9 0%, #a78bfa 100%)' },
-        'QNB Finansbank': { color: '#1E3A8A', gradient: 'linear-gradient(135deg, #1e3a8a 0%, #60a5fa 100%)' },
-        'Vakıfbank': { color: '#EAB308', gradient: 'linear-gradient(135deg, #ca8a04 0%, #facc15 100%)' },
-        'Halkbank': { color: '#0EA5E9', gradient: 'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)' },
+        'QNB Finansbank': { color: '#7B2D8E', gradient: 'linear-gradient(135deg, #581c87 0%, #a855f7 100%)' },
+        'Finansbank': { color: '#7B2D8E', gradient: 'linear-gradient(135deg, #581c87 0%, #a855f7 100%)' },
+        'Vakıfbank': { color: '#FFD700', gradient: 'linear-gradient(135deg, #ca8a04 0%, #fbbf24 100%)' },
+        'Halkbank': { color: '#0066B3', gradient: 'linear-gradient(135deg, #0369a1 0%, #38bdf8 100%)' },
+        'TEB': { color: '#00529B', gradient: 'linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)' },
+        'Denizbank': { color: '#003366', gradient: 'linear-gradient(135deg, #1e3a8a 0%, #0ea5e9 100%)' },
+        'ING': { color: '#FF6200', gradient: 'linear-gradient(135deg, #c2410c 0%, #fb923c 100%)' },
+        'HSBC': { color: '#DB0011', gradient: 'linear-gradient(135deg, #991b1b 0%, #ef4444 100%)' },
     };
 
     const getBankStyle = (name: string) => {
-        return BANK_BRANDS[name] || { color: '#71717a', gradient: 'linear-gradient(135deg, #3f3f46 0%, #71717a 100%)' };
+        // Check for partial match
+        for (const [key, value] of Object.entries(BANK_BRANDS)) {
+            if (name.toLowerCase().includes(key.toLowerCase()) || key.toLowerCase().includes(name.toLowerCase())) {
+                return value;
+            }
+        }
+        return { color: '#71717a', gradient: 'linear-gradient(135deg, #3f3f46 0%, #71717a 100%)' };
+    };
+
+    // Get bank initial for fallback logo
+    const getBankInitial = (name: string) => {
+        const words = name.split(' ');
+        if (words.length >= 2) {
+            return words[0][0] + words[1][0];
+        }
+        return name.substring(0, 2).toUpperCase();
     };
 
     const [expandedBank, setExpandedBank] = useState<string | null>(null);
@@ -211,8 +233,17 @@ export const Debts: React.FC = () => {
                             }}
                         >
                             <div className="bank-info">
-                                <div className="bank-icon" style={{ color: brand.color, boxShadow: `0 4px 12px ${brand.color}30` }}>
-                                    <Building2 size={20} />
+                                <div
+                                    className="bank-icon"
+                                    style={{
+                                        backgroundColor: brand.color,
+                                        color: 'white',
+                                        fontWeight: 700,
+                                        fontSize: '0.85rem',
+                                        boxShadow: `0 4px 12px ${brand.color}40`
+                                    }}
+                                >
+                                    {getBankInitial(bankName)}
                                 </div>
                                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                                     <span className="bank-name">{bankName}</span>
