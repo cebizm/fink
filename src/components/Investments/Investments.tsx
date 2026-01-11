@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
-import { TrendingUp, TrendingDown, Plus, Wallet, Coins, Landmark, Archive, Eye, EyeOff, RefreshCw } from 'lucide-react';
+import { TrendingUp, TrendingDown, Plus, Wallet, Eye, EyeOff, RefreshCw } from 'lucide-react';
 import './Investments.css';
 import { AddInvestmentModal } from '../Modals/AddInvestmentModal';
 import type { InvestmentType } from '../../types';
@@ -25,13 +25,49 @@ export const Investments: React.FC = () => {
         }
     };
 
-    const getIcon = (type: InvestmentType) => {
+    const getIcon = (type: InvestmentType, name?: string) => {
+        // Professional styled icons with symbols
         switch (type) {
-            case 'currency': return <Coins size={24} />;
-            case 'gold': return <Archive size={24} />;
-            case 'stock': return <TrendingUp size={24} />;
-            case 'deposit': return <Landmark size={24} />;
-            default: return <Wallet size={24} />;
+            case 'currency':
+                // Get currency symbol based on name
+                const symbol = name?.toUpperCase().includes('USD') ? '$'
+                    : name?.toUpperCase().includes('EUR') ? '€'
+                        : name?.toUpperCase().includes('GBP') ? '£'
+                            : name?.toUpperCase().includes('JPY') || name?.toUpperCase().includes('YEN') ? '¥'
+                                : name?.toUpperCase().includes('CHF') ? 'Fr'
+                                    : name?.toUpperCase().includes('TRY') || name?.toUpperCase().includes('TL') ? '₺'
+                                        : name?.toUpperCase().includes('RUB') ? '₽'
+                                            : name?.toUpperCase().includes('INR') ? '₹'
+                                                : name?.toUpperCase().includes('BTC') ? '₿'
+                                                    : name?.toUpperCase().includes('CAD') ? 'C$'
+                                                        : name?.toUpperCase().includes('AUD') ? 'A$'
+                                                            : name?.toUpperCase().includes('KRW') || name?.toUpperCase().includes('WON') ? '₩'
+                                                                : '$';
+                return (
+                    <span style={{
+                        fontSize: '1.2rem',
+                        fontWeight: 700,
+                        fontFamily: 'system-ui, -apple-system, sans-serif'
+                    }}>
+                        {symbol}
+                    </span>
+                );
+            case 'gold':
+                return (
+                    <span style={{ fontSize: '1.4rem', lineHeight: 1 }}>
+                        🪙
+                    </span>
+                );
+            case 'stock':
+                return <TrendingUp size={22} strokeWidth={2.5} />;
+            case 'deposit':
+                return (
+                    <span style={{ fontSize: '1.3rem', lineHeight: 1 }}>
+                        🏦
+                    </span>
+                );
+            default:
+                return <Wallet size={22} />;
         }
     };
 
@@ -159,7 +195,7 @@ export const Investments: React.FC = () => {
                             <div key={inv.id} className="investment-card card">
                                 <div className="inv-header">
                                     <div className={`inv-icon-wrapper type-${inv.type}`}>
-                                        {getIcon(inv.type)}
+                                        {getIcon(inv.type, inv.name)}
                                     </div>
                                     <div className="inv-info">
                                         <h4 className="inv-name">{inv.name || 'İsimsiz Varlık'}</h4>

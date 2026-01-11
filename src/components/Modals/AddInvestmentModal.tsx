@@ -3,6 +3,7 @@ import { useFinance } from '../../context/FinanceContext';
 import { X } from 'lucide-react';
 import './AddInvestmentModal.css';
 import type { InvestmentType } from '../../types';
+import { searchCurrencies, type Currency } from '../../constants/currencies';
 
 interface AddInvestmentModalProps {
     isOpen: boolean;
@@ -62,6 +63,9 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
     const [purchasePrice, setPurchasePrice] = useState('');
     const [maturity, setMaturity] = useState(''); // Days
     const [interestRate, setInterestRate] = useState(''); // Annual %
+    const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
+    const [currencySuggestions, setCurrencySuggestions] = useState<Currency[]>([]);
+    const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
 
     // Reset fields when type changes
     useEffect(() => {
@@ -70,6 +74,8 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
         setPurchasePrice('');
         setMaturity('');
         setInterestRate('');
+        setSelectedCurrency(null);
+        setShowCurrencyDropdown(false);
     }, [type]);
 
     useEffect(() => {
@@ -80,8 +86,20 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
             setPurchasePrice('');
             setMaturity('');
             setInterestRate('');
+            setSelectedCurrency(null);
+            setShowCurrencyDropdown(false);
         }
     }, [isOpen]);
+
+    // Update currency suggestions when name changes
+    useEffect(() => {
+        if (type === 'currency' && name.length > 0) {
+            const suggestions = searchCurrencies(name);
+            setCurrencySuggestions(suggestions);
+        } else {
+            setCurrencySuggestions([]);
+        }
+    }, [name, type]);
 
     if (!isOpen) return null;
 
@@ -169,15 +187,64 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group" style={{ position: 'relative' }}>
                         <label>Varlık Adı / Sembolü</label>
-                        <input
-                            type="text"
-                            placeholder={type === 'deposit' ? 'Örn: Vadeli Mevduat, KKM' : "Örn: USD, Gram Altın, Apple"}
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
+                        {type === 'currency' ? (
+                            <>
+                                <div className="currency-input-wrapper" style={{ position: 'relative' }}>
+                                    {selectedCurrency && (
+                                        <span className="currency-flag" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem' }}>
+                                            {selectedCurrency.flag}
+                                        </span>
+                                    )}
+                                    <input
+                                        type="text"
+                                        placeholder="Döviz ara... (örn: USD, Euro, Dolar)"
+                                        value={name}
+                                        onChange={(e) => {
+                                            setName(e.target.value);
+                                            setShowCurrencyDropdown(true);
+                                            setSelectedCurrency(null);
+                                        }}
+                                        onFocus={() => setShowCurrencyDropdown(true)}
+                                        style={{ paddingLeft: selectedCurrency ? '40px' : '12px' }}
+                                        required
+                                    />
+                                </div>
+                                {showCurrencyDropdown && currencySuggestions.length > 0 && (
+                                    <div className="currency-dropdown">
+                                        {currencySuggestions.slice(0, 8).map((currency) => (
+                                            <div
+                                                key={currency.code}
+                                                className="currency-option"
+                                                onClick={() => {
+                                                    setName(currency.code);
+                                                    setSelectedCurrency(currency);
+                                                    setShowCurrencyDropdown(false);
+                                                }}
+                                            >
+                                                <span className="currency-flag">{currency.flag}</span>
+                                                <div className="currency-info">
+                                                    <div className="currency-code">
+                                                        <span>{currency.code}</span>
+                                                        <span className="currency-symbol">({currency.symbol})</span>
+                                                    </div>
+                                                    <div className="currency-name">{currency.nameTr}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            <input
+                                type="text"
+                                placeholder={type === 'deposit' ? 'Örn: Vadeli Mevduat, KKM' : "Örn: Gram Altın, Apple"}
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        )}
                     </div>
 
                     {/* 

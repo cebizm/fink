@@ -246,6 +246,32 @@ export const subscriptionPlatforms: SubscriptionPlatform[] = [
         color: '#00A0E3',
         category: 'Fatura',
         type: 'bill'
+    },
+    // E-Commerce & Shopping
+    {
+        id: 'trendyol',
+        name: 'Trendyol',
+        logo: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/trendyol.svg',
+        color: '#F27A1A',
+        category: 'Alışveriş',
+        type: 'subscription'
+    },
+    {
+        id: 'hepsiburada',
+        name: 'Hepsiburada Premium',
+        logo: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/hepsiburada.svg',
+        color: '#FF6000',
+        category: 'Alışveriş',
+        type: 'subscription'
+    },
+    // Design & Productivity
+    {
+        id: 'canva',
+        name: 'Canva Pro',
+        logo: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/canva.svg',
+        color: '#00C4CC',
+        category: 'Üretkenlik',
+        type: 'subscription'
     }
 ];
 
