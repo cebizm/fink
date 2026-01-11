@@ -39,6 +39,17 @@ export interface Investment {
 
 export type DebtType = 'credit_card' | 'loan' | 'cash_advance';
 
+// Taksitli harcama (kredi kartı için)
+export interface CreditCardInstallment {
+  id: string;
+  description: string;  // "iPhone 15", "Buzdolabı"
+  totalAmount: number;  // Toplam taksit tutarı
+  installmentCount: number;  // Toplam taksit sayısı
+  paidInstallments: number;  // Ödenen taksit sayısı
+  monthlyAmount: number;  // Aylık taksit tutarı
+  startDate: string;  // Başlangıç tarihi (ISO string)
+}
+
 export interface Debt {
   id: string;
   bankName: string;
@@ -48,7 +59,9 @@ export interface Debt {
   remainingAmount: number; // Current Debt or Remaining Loan
   cutoffDate?: number; // Day of month (1-31)
   dueDate?: number; // Day of month (1-31)
-  installment?: number; // Monthly installment amount
+  installment?: number; // Monthly installment amount (for loans)
+  minimumPaymentRate?: number; // Asgari ödeme oranı % (varsayılan %20)
+  installments?: CreditCardInstallment[]; // Taksitli harcamalar (kredi kartı için)
 }
 
 export type NotificationType = 'upcoming' | 'overdue' | 'goal_invitation' | 'goal_invitation_rejected';
@@ -146,6 +159,7 @@ export interface FinanceContextType {
   deleteDebt: (id: string) => void;
   updateDebt: (id: string, debt: Partial<Debt>) => void;
   payDebt: (id: string, amount: number) => void;
+  addInstallmentToCard: (debtId: string, installment: Omit<CreditCardInstallment, 'id'>) => void;
   investments: Investment[];
   addInvestment: (investment: Omit<Investment, 'id'>) => void;
   deleteInvestment: (id: string) => void;

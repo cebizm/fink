@@ -155,6 +155,28 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         });
     };
 
+    // Add installment to credit card
+    // Note: Taksitli harcamalar kart borcuna eklenmez, ayrı hesaplanır
+    // Ekstre geldiğinde sadece o ayın taksitleri ödenir
+    const addInstallmentToCard = (debtId: string, installment: Omit<import('../types').CreditCardInstallment, 'id'>) => {
+        const debt = debts.find(d => d.id === debtId);
+        if (!debt || debt.type !== 'credit_card') return;
+
+        const newInstallment = {
+            ...installment,
+            id: uuidv4()
+        };
+
+        const currentInstallments = debt.installments || [];
+        const updatedInstallments = [...currentInstallments, newInstallment];
+
+        // Taksitli harcama kart borcuna eklenmez, sadece installments listesine
+        // Her ay ekstre kesildiğinde o ayın taksit toplamı borca eklenir (manuel veya otomatik)
+        updateDebtInDb(debtId, {
+            installments: updatedInstallments
+        });
+    };
+
     // Goals Actions
     const addGoal = (goalData: Omit<Goal, 'id' | 'currentAmount' | 'status' | 'participants'> & { participants: string[] }) => {
         if (!user) return;
@@ -253,7 +275,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         transactions, subscriptions, debts, investments,
         addTransaction, deleteTransaction, updateTransaction,
         addSubscription, deleteSubscription, paySubscription,
-        addDebt, deleteDebt, updateDebt, payDebt,
+        addDebt, deleteDebt, updateDebt, payDebt, addInstallmentToCard,
         addInvestment, deleteInvestment, updateInvestmentPrice,
         refreshMarketRates, isLoadingRates,
         goals, addGoal, deleteGoal, addContribution,

@@ -41,6 +41,58 @@ export const PayDebtModal: React.FC<PayDebtModalProps> = ({ isOpen, onClose, deb
                 </div>
 
                 <form onSubmit={handlePay}>
+                    {/* Quick payment buttons for credit cards */}
+                    {debt.type === 'credit_card' && debt.remainingAmount > 0 && (
+                        <div className="quick-payment-buttons" style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                            {debt.minimumPaymentRate && (
+                                <button
+                                    type="button"
+                                    className="quick-pay-btn"
+                                    style={{
+                                        flex: 1,
+                                        padding: '0.75rem',
+                                        background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                                        border: 'none',
+                                        borderRadius: '8px',
+                                        color: 'white',
+                                        fontWeight: 600,
+                                        cursor: 'pointer',
+                                        fontSize: '0.85rem'
+                                    }}
+                                    onClick={() => setAmount(Math.ceil(debt.remainingAmount * (debt.minimumPaymentRate! / 100)).toString())}
+                                >
+                                    Asgari (%{debt.minimumPaymentRate})
+                                    <br />
+                                    <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>
+                                        ₺{Math.ceil(debt.remainingAmount * (debt.minimumPaymentRate / 100)).toLocaleString()}
+                                    </span>
+                                </button>
+                            )}
+                            <button
+                                type="button"
+                                className="quick-pay-btn"
+                                style={{
+                                    flex: 1,
+                                    padding: '0.75rem',
+                                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                    border: 'none',
+                                    borderRadius: '8px',
+                                    color: 'white',
+                                    fontWeight: 600,
+                                    cursor: 'pointer',
+                                    fontSize: '0.85rem'
+                                }}
+                                onClick={() => setAmount(debt.remainingAmount.toString())}
+                            >
+                                Tam Ödeme
+                                <br />
+                                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>
+                                    ₺{debt.remainingAmount.toLocaleString()}
+                                </span>
+                            </button>
+                        </div>
+                    )}
+
                     <div className="pay-input-wrapper">
                         <span className="currency-prefix">₺</span>
                         <input

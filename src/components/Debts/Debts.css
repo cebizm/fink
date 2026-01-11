@@ -162,7 +162,7 @@
 /* Debt Items */
 .debt-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
     gap: 1.5rem;
 }
 
@@ -322,6 +322,8 @@
     align-items: center;
     position: relative;
     z-index: 2;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 .limit-info,
@@ -507,8 +509,8 @@
 }
 
 .card-action-btn {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -516,8 +518,14 @@
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.15);
     color: white;
+    flex-shrink: 0;
+}
+
+.card-action-btn.edit:hover {
+    background: rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
 }
 
 .card-action-btn.pay:hover {

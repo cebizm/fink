@@ -1,8 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import { Plus, Trash2, CreditCard, Wallet, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, CreditCard, Wallet, ChevronDown, ChevronUp, ShoppingBag, Pencil } from 'lucide-react';
 import { useFinance } from '../../context/FinanceContext';
 import { AddDebtModal } from '../Modals/AddDebtModal';
 import { PayDebtModal } from '../Modals/PayDebtModal';
+import { AddInstallmentModal } from '../Modals/AddInstallmentModal';
+import { EditDebtModal } from '../Modals/EditDebtModal';
 import type { Debt } from '../../types';
 import './Debts.css';
 import { startOfMonth, startOfYear, isAfter } from 'date-fns';
@@ -14,13 +16,16 @@ import { FREE_TIER_LIMITS } from '../../constants/limits';
 import { PremiumUpsellModal } from '../Modals/PremiumUpsellModal';
 
 export const Debts: React.FC = () => {
-    const { debts, deleteDebt, isPrivacyMode, transactions } = useFinance();
+    const { debts, deleteDebt, isPrivacyMode, transactions, addInstallmentToCard } = useFinance();
     const { user } = useAuth();
 
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isUpsellOpen, setIsUpsellOpen] = useState(false);
     const [payModalDebtId, setPayModalDebtId] = useState<string | null>(null);
     const [period, setPeriod] = useState<Period>('monthly');
+    const [installmentModalDebtId, setInstallmentModalDebtId] = useState<string | null>(null);
+    const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+    const [editDebtId, setEditDebtId] = useState<string | null>(null);
 
     const handleAddDebt = () => {
         if (!user?.isPremium && debts.length >= FREE_TIER_LIMITS.MAX_DEBTS) {
@@ -317,19 +322,61 @@ export const Debts: React.FC = () => {
                                                     </div>
                                                 </div>
                                                 <div className="card-footer">
-                                                    <div className="limit-info">
-                                                        <span className="label">Limit</span>
-                                                        <span className="value">
-                                                            {isPrivacyMode ? '****' : `₺${debt.totalAmount.toLocaleString()}`}
-                                                        </span>
-                                                    </div>
-                                                    <div className="debt-info">
-                                                        <span className="label">Borç</span>
-                                                        <span className="value warning" style={{ color: 'white' }}>
-                                                            {isPrivacyMode ? '****' : `₺${debt.remainingAmount.toLocaleString()}`}
-                                                        </span>
-                                                    </div>
+                                                    {(() => {
+                                                        // Calculate this month's installment total
+                                                        const installmentsMonthly = (debt.installments || [])
+                                                            .filter(inst => inst.paidInstallments < inst.installmentCount)
+                                                            .reduce((sum, inst) => sum + inst.monthlyAmount, 0);
+                                                        const thisMonthTotal = debt.remainingAmount + installmentsMonthly;
+                                                        const minPayment = Math.ceil(thisMonthTotal * ((debt.minimumPaymentRate || 20) / 100));
+
+                                                        return (
+                                                            <>
+                                                                <div className="limit-info">
+                                                                    <span className="label">Limit</span>
+                                                                    <span className="value">
+                                                                        {isPrivacyMode ? '****' : `₺${debt.totalAmount.toLocaleString()}`}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="debt-info">
+                                                                    <span className="label">Bu Ay</span>
+                                                                    <span className="value warning" style={{ color: 'white' }}>
+                                                                        {isPrivacyMode ? '****' : `₺${thisMonthTotal.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}`}
+                                                                    </span>
+                                                                </div>
+                                                                {debt.minimumPaymentRate && thisMonthTotal > 0 && (
+                                                                    <div className="minimum-payment-info" style={{ textAlign: 'right' }}>
+                                                                        <span className="label" style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.7)' }}>Asgari</span>
+                                                                        <span className="value" style={{ fontSize: '0.85rem', color: '#fbbf24' }}>
+                                                                            {isPrivacyMode ? '****' : `₺${minPayment.toLocaleString()}`}
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                            </>
+                                                        );
+                                                    })()}
                                                     <div className="card-actions">
+                                                        <button
+                                                            className="card-action-btn"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setInstallmentModalDebtId(debt.id);
+                                                            }}
+                                                            title="Taksit Ekle"
+                                                            style={{ background: 'rgba(139, 92, 246, 0.3)' }}
+                                                        >
+                                                            <ShoppingBag size={14} />
+                                                        </button>
+                                                        <button
+                                                            className="card-action-btn edit"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setEditDebtId(debt.id);
+                                                            }}
+                                                            title="Düzenle"
+                                                        >
+                                                            <Pencil size={14} />
+                                                        </button>
                                                         <button
                                                             className="card-action-btn pay"
                                                             onClick={(e) => {
@@ -338,7 +385,7 @@ export const Debts: React.FC = () => {
                                                             }}
                                                             title="Ödeme Yap"
                                                         >
-                                                            <Wallet size={16} />
+                                                            <Wallet size={14} />
                                                         </button>
                                                         <button
                                                             className="card-action-btn delete"
@@ -352,6 +399,95 @@ export const Debts: React.FC = () => {
                                                         </button>
                                                     </div>
                                                 </div>
+
+                                                {/* Card Detail Toggle */}
+                                                <div
+                                                    className="card-detail-toggle"
+                                                    onClick={() => setExpandedCardId(expandedCardId === debt.id ? null : debt.id)}
+                                                    style={{
+                                                        textAlign: 'center',
+                                                        padding: '8px',
+                                                        cursor: 'pointer',
+                                                        color: 'rgba(255,255,255,0.8)',
+                                                        fontSize: '0.75rem',
+                                                        borderTop: '1px solid rgba(255,255,255,0.1)',
+                                                        marginTop: '8px'
+                                                    }}
+                                                >
+                                                    {expandedCardId === debt.id ? 'Detayları Gizle ▲' : 'Detayları Göster ▼'}
+                                                </div>
+
+                                                {/* Expanded Card Details */}
+                                                {expandedCardId === debt.id && (
+                                                    <div className="card-details-section" style={{
+                                                        background: 'rgba(0,0,0,0.3)',
+                                                        borderRadius: '12px',
+                                                        padding: '12px',
+                                                        marginTop: '8px'
+                                                    }}>
+                                                        <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px' }}>
+                                                            📋 Kart Bilgileri
+                                                        </div>
+                                                        <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '12px' }}>
+                                                            <div style={{ flex: 1, minWidth: '100px' }}>
+                                                                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)' }}>Kart Adı</span>
+                                                                <div style={{ color: 'white', fontWeight: 500 }}>{debt.name}</div>
+                                                            </div>
+                                                            <div style={{ flex: 1, minWidth: '100px' }}>
+                                                                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)' }}>Asgari Oran</span>
+                                                                <div style={{ color: '#fbbf24', fontWeight: 500 }}>%{debt.minimumPaymentRate || 20}</div>
+                                                            </div>
+                                                            <div style={{ flex: 1, minWidth: '100px' }}>
+                                                                <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)' }}>Kullanılabilir</span>
+                                                                <div style={{ color: '#10b981', fontWeight: 500 }}>
+                                                                    {isPrivacyMode ? '****' : `₺${(debt.totalAmount - debt.remainingAmount).toLocaleString()}`}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        {/* Installments Section */}
+                                                        {debt.installments && debt.installments.length > 0 && (
+                                                            <>
+                                                                <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.85rem', fontWeight: 600, marginBottom: '8px', marginTop: '12px' }}>
+                                                                    🛍️ Taksitli Harcamalar ({debt.installments.length})
+                                                                </div>
+                                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                                                    {debt.installments.map(inst => (
+                                                                        <div key={inst.id} style={{
+                                                                            background: 'rgba(255,255,255,0.1)',
+                                                                            borderRadius: '8px',
+                                                                            padding: '10px',
+                                                                            display: 'flex',
+                                                                            justifyContent: 'space-between',
+                                                                            alignItems: 'center'
+                                                                        }}>
+                                                                            <div>
+                                                                                <div style={{ color: 'white', fontWeight: 500, fontSize: '0.85rem' }}>{inst.description}</div>
+                                                                                <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.75rem' }}>
+                                                                                    {inst.paidInstallments}/{inst.installmentCount} taksit ödendi
+                                                                                </div>
+                                                                            </div>
+                                                                            <div style={{ textAlign: 'right' }}>
+                                                                                <div style={{ color: '#fbbf24', fontWeight: 600, fontSize: '0.9rem' }}>
+                                                                                    ₺{inst.monthlyAmount.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}/ay
+                                                                                </div>
+                                                                                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>
+                                                                                    Toplam: ₺{inst.totalAmount.toLocaleString()}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </>
+                                                        )}
+
+                                                        {(!debt.installments || debt.installments.length === 0) && (
+                                                            <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem', textAlign: 'center', padding: '12px' }}>
+                                                                Henüz taksitli harcama yok. 🛍️ butonuyla ekleyebilirsin.
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
                                             </div>
                                         );
                                     }
@@ -430,6 +566,20 @@ export const Debts: React.FC = () => {
                 isOpen={isUpsellOpen}
                 onClose={() => setIsUpsellOpen(false)}
                 description={`Ücretsiz planda en fazla ${FREE_TIER_LIMITS.MAX_DEBTS} borç takip edebilirsiniz.`}
+            />
+            <AddInstallmentModal
+                isOpen={!!installmentModalDebtId}
+                onClose={() => setInstallmentModalDebtId(null)}
+                onAdd={(installment) => {
+                    if (installmentModalDebtId) {
+                        addInstallmentToCard(installmentModalDebtId, installment);
+                    }
+                }}
+            />
+            <EditDebtModal
+                isOpen={!!editDebtId}
+                debtId={editDebtId}
+                onClose={() => setEditDebtId(null)}
             />
         </div>
     );

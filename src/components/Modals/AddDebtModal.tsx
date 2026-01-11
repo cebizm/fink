@@ -23,6 +23,7 @@ export const AddDebtModal: React.FC<AddDebtModalProps> = ({ isOpen, onClose }) =
     const [cutoffDate, setCutoffDate] = useState(''); // Day of month
     const [dueDate, setDueDate] = useState(''); // Day of month
     const [installment, setInstallment] = useState('');
+    const [minimumPaymentRate, setMinimumPaymentRate] = useState('20'); // Default %20
 
     if (!isOpen) return null;
 
@@ -55,7 +56,9 @@ export const AddDebtModal: React.FC<AddDebtModalProps> = ({ isOpen, onClose }) =
             remainingAmount: parsedRemaining,
             cutoffDate: cutoffDate ? parseInt(cutoffDate) : undefined,
             dueDate: dueDate ? parseInt(dueDate) : undefined,
-            installment: parsedInstallment || undefined
+            installment: parsedInstallment || undefined,
+            minimumPaymentRate: type === 'credit_card' ? parseFloat(minimumPaymentRate) || 20 : undefined,
+            installments: type === 'credit_card' ? [] : undefined
         });
 
         // Reset
@@ -66,6 +69,7 @@ export const AddDebtModal: React.FC<AddDebtModalProps> = ({ isOpen, onClose }) =
         setCutoffDate('');
         setDueDate('');
         setInstallment('');
+        setMinimumPaymentRate('20');
 
         onClose();
     };
@@ -169,39 +173,59 @@ export const AddDebtModal: React.FC<AddDebtModalProps> = ({ isOpen, onClose }) =
                     </div>
 
                     {type === 'credit_card' ? (
-                        <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
-                            <div className="form-group" style={{ flex: 1 }}>
-                                <label>Hesap Kesim Günü</label>
+                        <>
+                            <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
+                                <div className="form-group" style={{ flex: 1 }}>
+                                    <label>Hesap Kesim Günü</label>
+                                    <div className="input-wrapper">
+                                        <Calendar className="input-icon" size={20} />
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="31"
+                                            className="add-debt-input"
+                                            placeholder="Gün (1-31)"
+                                            value={cutoffDate}
+                                            onChange={e => setCutoffDate(e.target.value)}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-group" style={{ flex: 1 }}>
+                                    <label>Son Ödeme Günü</label>
+                                    <div className="input-wrapper">
+                                        <Calendar className="input-icon" size={20} />
+                                        <input
+                                            type="number"
+                                            min="1"
+                                            max="31"
+                                            className="add-debt-input"
+                                            placeholder="Gün (1-31)"
+                                            value={dueDate}
+                                            onChange={e => setDueDate(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label>Asgari Ödeme Oranı (%)</label>
                                 <div className="input-wrapper">
-                                    <Calendar className="input-icon" size={20} />
+                                    <span className="currency-symbol">%</span>
                                     <input
                                         type="number"
                                         min="1"
-                                        max="31"
+                                        max="100"
                                         className="add-debt-input"
-                                        placeholder="Gün (1-31)"
-                                        value={cutoffDate}
-                                        onChange={e => setCutoffDate(e.target.value)}
+                                        placeholder="20"
+                                        value={minimumPaymentRate}
+                                        onChange={e => setMinimumPaymentRate(e.target.value)}
                                     />
                                 </div>
+                                <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '4px' }}>
+                                    Genelde %20-40 arası. Asgari ödeme tutarı bu oranla hesaplanır.
+                                </span>
                             </div>
-                            <div className="form-group" style={{ flex: 1 }}>
-                                <label>Son Ödeme Günü</label>
-                                <div className="input-wrapper">
-                                    <Calendar className="input-icon" size={20} />
-                                    <input
-                                        type="number"
-                                        min="1"
-                                        max="31"
-                                        className="add-debt-input"
-                                        placeholder="Gün (1-31)"
-                                        value={dueDate}
-                                        onChange={e => setDueDate(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                        </>
                     ) : (
                         <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
                             <div className="form-group" style={{ flex: 1 }}>
