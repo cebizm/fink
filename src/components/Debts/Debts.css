@@ -553,15 +553,15 @@
 }
 
 .btn-icon-danger {
-    background: none;
+    background: rgba(255, 255, 255, 0.15);
     border: none;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(255, 255, 255, 0.7);
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
+    opacity: 0.7;
 }
 
 .debt-card:hover .btn-icon-danger,

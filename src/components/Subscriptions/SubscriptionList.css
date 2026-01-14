@@ -210,22 +210,25 @@
 }
 
 .btn-icon-danger {
-    color: var(--color-text-secondary);
-    padding: 0.5rem;
-    border-radius: var(--radius-md);
-    transition: all 0.2s;
-    opacity: 0;
-    /* Hidden by default for cleaner look */
+    color: #9ca3af !important;
+    padding: 0.4rem !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+    background-color: transparent !important;
+    opacity: 0.5 !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
 }
 
 .subscription-card:hover .btn-icon-danger {
-    opacity: 1;
-    /* Show on hover */
+    opacity: 1 !important;
 }
 
 .btn-icon-danger:hover {
-    color: var(--color-accent-danger);
-    background-color: #fef2f2;
+    color: #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.1) !important;
+    opacity: 1 !important;
 }
 
 .empty-subs {
