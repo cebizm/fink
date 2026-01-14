@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { TrendingUp, Wallet, CreditCard, Target, PieChart, ArrowRight, Sparkles, ChevronDown, Shield, Users, Moon, Bell } from 'lucide-react';
 import './Landing.css';
 
@@ -10,27 +10,32 @@ export const Landing: React.FC = () => {
         {
             icon: <Wallet size={32} />,
             title: 'İşlemler',
-            description: 'Gelir ve giderlerini kolayca takip et, kategorilere ayır, raporlarla analiz et.'
+            description: 'Gelir ve giderlerini kolayca takip et, kategorilere ayır, raporlarla analiz et.',
+            color: 'linear-gradient(135deg, #6366f1, #8b5cf6)'
         },
         {
             icon: <CreditCard size={32} />,
             title: 'Abonelikler',
-            description: 'Tekrarlayan ödemelerini yönet, ödeme tarihlerini kaçırma.'
+            description: 'Tekrarlayan ödemelerini yönet, ödeme tarihlerini kaçırma.',
+            color: 'linear-gradient(135deg, #ec4899, #f43f5e)'
         },
         {
             icon: <TrendingUp size={32} />,
             title: 'Borçlar & Alacaklar',
-            description: 'Borçlarını ve alacaklarını takip et, unutma.'
+            description: 'Borçlarını ve alacaklarını takip et, unutma.',
+            color: 'linear-gradient(135deg, #f59e0b, #ef4444)'
         },
         {
             icon: <Target size={32} />,
             title: 'Hedefler',
-            description: 'Finansal hedefler belirle, birlikte hedef oluştur, ilerlemeni izle.'
+            description: 'Finansal hedefler belirle, birlikte hedef oluştur, ilerlemeni izle.',
+            color: 'linear-gradient(135deg, #10b981, #14b8a6)'
         },
         {
             icon: <PieChart size={32} />,
             title: 'Birikimler',
-            description: 'Döviz, altın, mevduat yatırımlarını takip et, kazancını gör.'
+            description: 'Döviz, altın, mevduat yatırımlarını takip et, kazancını gör.',
+            color: 'linear-gradient(135deg, #3b82f6, #06b6d4)'
         }
     ];
 
@@ -216,7 +221,7 @@ export const Landing: React.FC = () => {
                     <div className="features-grid">
                         {features.map((feature, index) => (
                             <div key={index} className="feature-card">
-                                <div className="feature-icon">
+                                <div className="feature-icon" style={{ background: feature.color, color: 'white' }}>
                                     {feature.icon}
                                 </div>
                                 <h3 className="feature-title">{feature.title}</h3>
@@ -379,13 +384,14 @@ export const Landing: React.FC = () => {
                             <p>Modern finans yönetimi platformu</p>
                         </div>
                         <div className="footer-links">
-                            <a href="#">Gizlilik Politikası</a>
-                            <a href="#">Kullanım Şartları</a>
-                            <a href="#">İletişim</a>
+                            <Link to="/privacy-policy">Gizlilik Politikası</Link>
+                            <Link to="/terms-of-service">Kullanım Şartları</Link>
+                            <Link to="/contact">İletişim</Link>
                         </div>
                     </div>
                     <div className="footer-bottom">
                         <p>&copy; 2025 Fink. Tüm hakları saklıdır.</p>
+                        <p className="footer-disclaimer">Fink bir test projesidir. Girilen verilerin doğruluğu garanti edilmez ve finansal tavsiye niteliği taşımaz.</p>
                     </div>
                 </div>
             </footer>

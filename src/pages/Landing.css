@@ -670,28 +670,30 @@
     padding: 2rem;
     background: var(--color-bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 1rem;
-    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 1.25rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
 .feature-icon {
     display: inline-flex;
     padding: 1rem;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
     border-radius: 1rem;
-    color: var(--color-accent-primary);
     margin-bottom: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .feature-title {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
+    color: var(--color-text-primary);
 }
 
 .feature-description {

@@ -27,6 +27,10 @@ import { PremiumPage } from './pages/Premium/Premium';
 import { PaymentMethods } from './pages/Profile/PaymentMethods';
 import { AdminDashboard } from './pages/Admin/AdminDashboard';
 import { AdminRoute } from './components/AdminRoute';
+import { PrivacyPolicy } from './pages/Legal/PrivacyPolicy';
+import { TermsOfService } from './pages/Legal/TermsOfService';
+import { Contact } from './pages/Legal/Contact';
+import { KVKKDisclosure } from './pages/Legal/KVKKDisclosure';
 import { Plus } from 'lucide-react';
 
 // Smart Home Route - Landing or Dashboard
@@ -93,6 +97,10 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/kvkk" element={<KVKKDisclosure />} />
 
                 {/* Admin Route */}
                 <Route path="/admin" element={

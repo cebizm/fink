@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { ProfileSubPageLayout } from './ProfileSubPageLayout';
 
@@ -60,7 +61,7 @@ export const PrivacySettings: React.FC = () => {
                 <h4 style={{ color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>KVKK Bilgilendirmesi</h4>
                 <p>
                     Kişisel verileriniz, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında işlenmektedir.
-                    Detaylı bilgi için <a href="#" style={{ color: 'var(--color-accent-primary)' }}>Aydınlatma Metni</a>'ni inceleyebilirsiniz.
+                    Detaylı bilgi için <Link to="/kvkk" style={{ color: 'var(--color-accent-primary)' }}>Aydınlatma Metni</Link>'ni inceleyebilirsiniz.
                 </p>
                 <p style={{ marginTop: '0.5rem' }}>
                     Veri işleme izinlerinizi dilediğiniz zaman bu panelden değiştirebilirsiniz.
