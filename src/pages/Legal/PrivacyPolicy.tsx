@@ -99,12 +99,32 @@ export const PrivacyPolicy: React.FC = () => {
                     </section>
 
                     <section className="legal-section">
-                        <h2 className="legal-section-title">BÖLÜM 5<br /><span className="highlight">İLETİŞİM</span></h2>
+                        <h2 className="legal-section-title">BÖLÜM 5<br /><span className="highlight">SORUMLULUK REDDİ</span></h2>
 
                         <div className="legal-article">
-                            <h3>5. BİZE ULAŞIN</h3>
+                            <h3>5. SORUMLULUK SINIRLAMASI</h3>
                             <p>
-                                <strong>5.1.</strong> Gizlilik politikamız hakkında sorularınız için <a href="mailto:privacy@fink.app">privacy@fink.app</a> adresinden bizimle iletişime geçebilirsiniz.
+                                <strong>5.1.</strong> Fink bir <span className="highlight-text">test projesidir</span> ve yalnızca eğitim/deneme amaçlıdır.
+                            </p>
+                            <p>
+                                <strong>5.2.</strong> Kullanıcıların girdiği verilerin doğruluğu, güvenliği veya kaybolmaması konusunda <strong>hiçbir garanti verilmemektedir</strong>.
+                            </p>
+                            <p>
+                                <strong>5.3.</strong> Fink, kullanıcıların verdiği finansal kararlardan, veri kayıplarından veya herhangi bir zarardan <strong>kesinlikle sorumlu değildir</strong>.
+                            </p>
+                            <p>
+                                <strong>5.4.</strong> Uygulama "OLDUĞU GİBİ" sunulmaktadır ve <strong>hiçbir tazminat yükümlülüğü kabul edilmemektedir</strong>.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="legal-section">
+                        <h2 className="legal-section-title">BÖLÜM 6<br /><span className="highlight">İLETİŞİM</span></h2>
+
+                        <div className="legal-article">
+                            <h3>6. BİZE ULAŞIN</h3>
+                            <p>
+                                <strong>6.1.</strong> Gizlilik politikamız hakkında sorularınız için <a href="mailto:privacy@fink.app">privacy@fink.app</a> adresinden bizimle iletişime geçebilirsiniz.
                             </p>
                             <p className="legal-footer-note">
                                 Son güncelleme: 14 Ocak 2026 | Fink

@@ -151,16 +151,36 @@ export const KVKKDisclosure: React.FC = () => {
                     </section>
 
                     <section className="legal-section">
-                        <h2 className="legal-section-title">BÖLÜM 7<br /><span className="highlight">BAŞVURU</span></h2>
+                        <h2 className="legal-section-title">BÖLÜM 7<br /><span className="highlight">SORUMLULUK REDDİ</span></h2>
 
                         <div className="legal-article">
-                            <h3>7. BAŞVURU YÖNTEMİ</h3>
+                            <h3>7. VERİ GÜVENLİĞİ SORUMLULUĞU</h3>
                             <p>
-                                <strong>7.1.</strong> Yukarıda belirtilen haklarınızı kullanmak için <a href="mailto:kvkk@fink.app">kvkk@fink.app</a> adresine
+                                <strong>7.1.</strong> Fink bir <span className="highlight-text">test projesidir</span> ve kişisel verilerin güvenliği konusunda <strong>profesyonel düzeyde garanti verilmemektedir</strong>.
+                            </p>
+                            <p>
+                                <strong>7.2.</strong> Veri kaybı, yetkisiz erişim veya güvenlik ihlali durumlarında <strong>Fink hiçbir sorumluluk kabul etmez</strong>.
+                            </p>
+                            <p>
+                                <strong>7.3.</strong> Kullanıcılar, verilerini kendi riskleri altında paylaşmaktadır.
+                            </p>
+                            <p>
+                                <strong>7.4.</strong> Veri işleme faaliyetlerinden kaynaklanan <strong>hiçbir zarar için tazminat talep edilemez</strong>.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section className="legal-section">
+                        <h2 className="legal-section-title">BÖLÜM 8<br /><span className="highlight">BAŞVURU</span></h2>
+
+                        <div className="legal-article">
+                            <h3>8. BAŞVURU YÖNTEMİ</h3>
+                            <p>
+                                <strong>8.1.</strong> Yukarıda belirtilen haklarınızı kullanmak için <a href="mailto:kvkk@fink.app">kvkk@fink.app</a> adresine
                                 e-posta gönderebilirsiniz.
                             </p>
                             <p>
-                                <strong>7.2.</strong> Başvurunuz en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır.
+                                <strong>8.2.</strong> Başvurunuz en geç 30 gün içinde ücretsiz olarak sonuçlandırılacaktır.
                             </p>
                             <p className="legal-footer-note">
                                 Son güncelleme: 14 Ocak 2026 | Fink

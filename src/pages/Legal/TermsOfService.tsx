@@ -97,18 +97,30 @@ export const TermsOfService: React.FC = () => {
                     </section>
 
                     <section className="legal-section">
-                        <h2 className="legal-section-title">BÖLÜM 5<br /><span className="highlight">SORUMLULUK SINIRLAMASI</span></h2>
+                        <h2 className="legal-section-title">BÖLÜM 5<br /><span className="highlight">SORUMLULUK REDDİ VE SINIRLAMASI</span></h2>
 
                         <div className="legal-article">
-                            <h3>5. SINIRLAMALAR</h3>
+                            <h3>5. TAM SORUMLULUK REDDİ</h3>
                             <p>
-                                <strong>5.1.</strong> Fink, hizmetin kesintisiz ve hatasız çalışacağını garanti etmez.
+                                <strong>5.1.</strong> Fink bir <span className="highlight-text">test projesidir</span> ve profesyonel bir finansal hizmet değildir.
                             </p>
                             <p>
-                                <strong>5.2.</strong> Kullanıcının girdiği verilerin doğruluğundan Fink sorumlu değildir.
+                                <strong>5.2.</strong> Fink, hizmetin kesintisiz, hatasız veya güvenli çalışacağına dair <strong>hiçbir garanti vermez</strong>.
                             </p>
                             <p>
-                                <strong>5.3.</strong> Fink, finansal tavsiye vermez; tüm kararlar Kullanıcı'nın sorumluluğundadır.
+                                <strong>5.3.</strong> Kullanıcının girdiği verilerin doğruluğu, kaydedilmesi veya kaybolmaması konusunda <strong>Fink hiçbir sorumluluk kabul etmez</strong>.
+                            </p>
+                            <p>
+                                <strong>5.4.</strong> Fink <strong>finansal tavsiye vermez</strong>; tüm finansal kararlar ve bunların sonuçları tamamen Kullanıcı'nın sorumluluğundadır.
+                            </p>
+                            <p>
+                                <strong>5.5.</strong> Kullanıcının uğrayabileceği <strong>herhangi bir maddi veya manevi zarar</strong>, veri kaybı, finansal kayıp veya diğer zararlardan <strong>Fink kesinlikle sorumlu tutulamaz</strong>.
+                            </p>
+                            <p>
+                                <strong>5.6.</strong> Uygulama "OLDUĞU GİBİ" (AS IS) ve "MEVCUT HALIYLE" (AS AVAILABLE) sunulmaktadır.
+                            </p>
+                            <p>
+                                <strong>5.7.</strong> <strong>HİÇBİR KOŞULDA TAZMİNAT TALEP HAKKINA SAHİP DEĞİLSİNİZ.</strong>
                             </p>
                         </div>
                     </section>

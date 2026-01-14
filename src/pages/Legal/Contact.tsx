@@ -29,6 +29,12 @@ export const Contact: React.FC = () => {
                 <h1 className="legal-main-title">İLETİŞİM</h1>
 
                 <div className="legal-content">
+                    <div style={{ marginBottom: '2rem', padding: '1rem', background: '#fef3c7', borderRadius: '0.5rem', border: '2px solid #f59e0b' }}>
+                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#92400e', fontWeight: 600 }}>
+                            ⚠️ <strong>ÖNEMLİ:</strong> Fink bir test projesidir. Destek talepleri için yanıt garantisi verilmemektedir.
+                            Uygulama kullanımından kaynaklanan hiçbir sorumluluk kabul edilmez.
+                        </p>
+                    </div>
                     <div className="contact-grid">
                         {/* Contact Info Section */}
                         <div className="contact-info-section">
