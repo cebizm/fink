@@ -140,6 +140,7 @@ export interface Goal {
   targetAmount: number;
   currentAmount: number;
   deadline: string; // ISO string
+  currency?: 'TRY' | 'USD' | 'EUR' | 'GBP'; // Para birimi, varsayılan TRY
   participants: Participant[];
   status: 'active' | 'completed';
   userId?: string; // For backward compatibility with legacy single-user goals
@@ -154,16 +155,20 @@ export interface FinanceContextType {
   deleteTransaction: (id: string) => void;
   addSubscription: (subscription: Omit<Subscription, 'id'>) => void;
   deleteSubscription: (id: string) => void;
+  updateSubscription: (id: string, subscription: Partial<Subscription>) => void;
   paySubscription: (id: string) => void;
   addDebt: (debt: Omit<Debt, 'id'>) => void;
   deleteDebt: (id: string) => void;
   updateDebt: (id: string, debt: Partial<Debt>) => void;
   payDebt: (id: string, amount: number) => void;
   addInstallmentToCard: (debtId: string, installment: Omit<CreditCardInstallment, 'id'>) => void;
+  deleteInstallmentFromCard: (debtId: string, installmentId: string) => void;
+  updateInstallmentOnCard: (debtId: string, installmentId: string, installment: Partial<CreditCardInstallment>) => void;
   investments: Investment[];
   addInvestment: (investment: Omit<Investment, 'id'>) => void;
   deleteInvestment: (id: string) => void;
   updateInvestmentPrice: (id: string, newPrice: number) => void;
+  updateInvestment: (id: string, data: Partial<Investment>) => void;
   refreshMarketRates: () => Promise<void>;
   isLoadingRates: boolean;
 
@@ -171,6 +176,7 @@ export interface FinanceContextType {
   goals: Goal[];
   addGoal: (goal: Omit<Goal, 'id' | 'currentAmount' | 'status' | 'participants'> & { participants: string[] }) => void;
   deleteGoal: (id: string) => void;
+  updateGoal: (id: string, goal: Partial<Goal>) => void;
   addContribution: (goalId: string, participantId: string, amount: number) => void;
 
   // Goal Invitations

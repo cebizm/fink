@@ -149,3 +149,44 @@ export const searchCurrencies = (query: string): Currency[] => {
 export const findCurrencyByCode = (code: string): Currency | undefined => {
     return worldCurrencies.find(c => c.code.toLowerCase() === code.toLowerCase());
 };
+
+// Precious Metals (Kıymetli Madenler)
+export interface PreciousMetal {
+    code: string;
+    name: string;
+    nameTr: string;
+    symbol: string;
+    unit: string;
+}
+
+export const preciousMetals: PreciousMetal[] = [
+    { code: 'XAU', name: 'Gram Gold', nameTr: 'Gram Altın', symbol: '🪙', unit: 'gr' },
+    { code: 'GAU', name: 'Quarter Gold', nameTr: 'Çeyrek Altın', symbol: '🪙', unit: 'adet' },
+    { code: 'YAR', name: 'Half Gold', nameTr: 'Yarım Altın', symbol: '🪙', unit: 'adet' },
+    { code: 'TAM', name: 'Full Gold', nameTr: 'Tam Altın', symbol: '🪙', unit: 'adet' },
+    { code: 'ATA', name: 'Ata Gold', nameTr: 'Ata Altın', symbol: '🪙', unit: 'adet' },
+    { code: 'CUM', name: 'Republic Gold', nameTr: 'Cumhuriyet Altını', symbol: '🪙', unit: 'adet' },
+    { code: '22A', name: '22K Gold', nameTr: '22 Ayar Altın', symbol: '🪙', unit: 'gr' },
+    { code: '18A', name: '18K Gold', nameTr: '18 Ayar Altın', symbol: '🪙', unit: 'gr' },
+    { code: '14A', name: '14K Gold', nameTr: '14 Ayar Altın', symbol: '🪙', unit: 'gr' },
+    { code: 'XAG', name: 'Silver', nameTr: 'Gümüş', symbol: '🥈', unit: 'gr' },
+    { code: 'XPT', name: 'Platinum', nameTr: 'Platin', symbol: '⚪', unit: 'gr' },
+    { code: 'XPD', name: 'Palladium', nameTr: 'Paladyum', symbol: '⚪', unit: 'gr' },
+];
+
+// Search precious metals
+export const searchPreciousMetals = (query: string): PreciousMetal[] => {
+    if (!query.trim()) return preciousMetals;
+
+    const lowerQuery = query.toLowerCase();
+    return preciousMetals.filter(m =>
+        m.code.toLowerCase().includes(lowerQuery) ||
+        m.name.toLowerCase().includes(lowerQuery) ||
+        m.nameTr.toLowerCase().includes(lowerQuery)
+    );
+};
+
+// Find metal by code
+export const findMetalByCode = (code: string): PreciousMetal | undefined => {
+    return preciousMetals.find(m => m.code.toLowerCase() === code.toLowerCase());
+};

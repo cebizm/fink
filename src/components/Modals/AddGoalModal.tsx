@@ -16,6 +16,7 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = ({ isOpen, onClose }) =
     const [title, setTitle] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [deadline, setDeadline] = useState('');
+    const [currency, setCurrency] = useState<'TRY' | 'USD' | 'EUR' | 'GBP'>('TRY');
     const [inviteeEmail, setInviteeEmail] = useState('');
     const [isSearching, setIsSearching] = useState(false);
     const [error, setError] = useState('');
@@ -73,6 +74,7 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = ({ isOpen, onClose }) =
                     title,
                     targetAmount: parseFloat(targetAmount),
                     deadline,
+                    currency,
                     participants: ['Ben']
                 });
             }
@@ -81,6 +83,7 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = ({ isOpen, onClose }) =
             setTitle('');
             setTargetAmount('');
             setDeadline('');
+            setCurrency('TRY');
             setInviteeEmail('');
             setIsSearching(false);
             onClose();
@@ -113,15 +116,30 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = ({ isOpen, onClose }) =
                         />
                     </div>
 
-                    <div className="form-group">
-                        <label>Hedef Tutar</label>
-                        <input
-                            type="number"
-                            placeholder="0.00"
-                            value={targetAmount}
-                            onChange={e => setTargetAmount(e.target.value)}
-                            required
-                        />
+                    <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
+                        <div className="form-group" style={{ flex: 1 }}>
+                            <label>Hedef Tutar</label>
+                            <input
+                                type="number"
+                                placeholder="0.00"
+                                value={targetAmount}
+                                onChange={e => setTargetAmount(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className="form-group" style={{ width: '120px' }}>
+                            <label>Para Birimi</label>
+                            <select
+                                value={currency}
+                                onChange={e => setCurrency(e.target.value as any)}
+                                style={{ height: '44px' }}
+                            >
+                                <option value="TRY">₺ TL</option>
+                                <option value="USD">$ USD</option>
+                                <option value="EUR">€ EUR</option>
+                                <option value="GBP">£ GBP</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div className="form-group">

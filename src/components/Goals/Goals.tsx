@@ -3,11 +3,12 @@ import { useFinance } from '../../context/FinanceContext';
 import { AddGoalModal } from '../Modals/AddGoalModal';
 import { AddContributionModal } from '../Modals/AddContributionModal';
 import './Goals.css';
-import { Plus, Target, Check, Trash2 } from 'lucide-react';
+import { Plus, Target, Check, Trash2, Pencil } from 'lucide-react';
 
 import { useAuth } from '../../context/AuthContext';
 import { FREE_TIER_LIMITS } from '../../constants/limits';
 import { PremiumUpsellModal } from '../Modals/PremiumUpsellModal';
+import { EditGoalModal } from '../Modals/EditGoalModal';
 
 export const Goals: React.FC = () => {
     const { goals, deleteGoal } = useFinance();
@@ -16,6 +17,7 @@ export const Goals: React.FC = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [isUpsellOpen, setIsUpsellOpen] = useState(false);
     const [contributionModalGoalId, setContributionModalGoalId] = useState<string | null>(null);
+    const [editGoalId, setEditGoalId] = useState<string | null>(null);
 
     const handleAddGoal = () => {
         if (!user?.isPremium && goals.length >= FREE_TIER_LIMITS.MAX_GOALS) {
@@ -31,13 +33,15 @@ export const Goals: React.FC = () => {
         return days > 0 ? days : 0;
     };
 
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('tr-TR', {
-            style: 'currency',
-            currency: 'TRY',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-        }).format(amount);
+    const formatCurrency = (amount: number, currency: string = 'TRY') => {
+        const currencyMap: Record<string, string> = {
+            'TRY': '₺',
+            'USD': '$',
+            'EUR': '€',
+            'GBP': '£'
+        };
+        const symbol = currencyMap[currency] || '₺';
+        return `${symbol}${amount.toLocaleString('tr-TR')}`;
     };
 
     return (
@@ -71,25 +75,38 @@ export const Goals: React.FC = () => {
                                 <div style={{ flex: 1 }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                         <h3 className="goal-title">{goal.title}</h3>
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                if (confirm('Bu hedefi silmek istediğinizden emin misiniz?')) {
-                                                    deleteGoal(goal.id);
-                                                }
-                                            }}
-                                            className="icon-btn-danger"
-                                            title="Hedefi Sil"
-                                            style={{ padding: '4px', marginTop: '-4px', marginRight: '-4px' }}
-                                        >
-                                            <Trash2 size={16} />
-                                        </button>
+                                        <div style={{ display: 'flex', gap: '4px' }}>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setEditGoalId(goal.id);
+                                                }}
+                                                className="icon-btn-danger"
+                                                title="Hedefi Düzenle"
+                                                style={{ padding: '4px', marginTop: '-4px' }}
+                                            >
+                                                <Pencil size={16} />
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (confirm('Bu hedefi silmek istediğinizden emin misiniz?')) {
+                                                        deleteGoal(goal.id);
+                                                    }
+                                                }}
+                                                className="icon-btn-danger"
+                                                title="Hedefi Sil"
+                                                style={{ padding: '4px', marginTop: '-4px', marginRight: '-4px' }}
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="goal-amounts" style={{ marginTop: '0.5rem', marginBottom: '1rem', textAlign: 'right' }}>
-                                <div className="current-amount">{formatCurrency(goal.currentAmount)}</div>
-                                <div className="target-amount">/ {formatCurrency(goal.targetAmount)}</div>
+                                <div className="current-amount">{formatCurrency(goal.currentAmount, goal.currency)}</div>
+                                <div className="target-amount">/ {formatCurrency(goal.targetAmount, goal.currency)}</div>
                             </div>
 
                             {/* Ultra-simple progress bar */}
@@ -124,7 +141,7 @@ export const Goals: React.FC = () => {
                                             marginBottom: '0.25rem'
                                         }}>
                                             <span style={{ fontWeight: '500' }}>{participant.name}</span>
-                                            <span style={{ fontWeight: '700' }}>{formatCurrency(participant.totalContributed)}</span>
+                                            <span style={{ fontWeight: '700' }}>{formatCurrency(participant.totalContributed, goal.currency)}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -178,6 +195,12 @@ export const Goals: React.FC = () => {
                 isOpen={isUpsellOpen}
                 onClose={() => setIsUpsellOpen(false)}
                 description={`Ücretsiz planda en fazla ${FREE_TIER_LIMITS.MAX_GOALS} hedef belirleyebilirsiniz.`}
+            />
+
+            <EditGoalModal
+                isOpen={!!editGoalId}
+                goalId={editGoalId}
+                onClose={() => setEditGoalId(null)}
             />
         </div>
     );

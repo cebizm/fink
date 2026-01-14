@@ -87,6 +87,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (user) addSubscriptionToDb(user.id, s);
     };
     const deleteSubscription = (id: string) => deleteSubscriptionFromDb(id);
+    const updateSubscription = (id: string, s: Partial<Subscription>) => {
+        updateSubscriptionInDb(id, s);
+    };
 
     const paySubscription = (id: string) => {
         const sub = subscriptions.find(s => s.id === id);
@@ -122,6 +125,9 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const deleteInvestment = (id: string) => deleteInvestmentFromDb(id);
     const updateInvestmentPrice = (id: string, newPrice: number) => {
         updateInvestmentInDb(id, { currentPrice: newPrice });
+    };
+    const updateInvestment = (id: string, data: Partial<Investment>) => {
+        updateInvestmentInDb(id, data);
     };
 
     const refreshMarketRates = async () => { };
@@ -170,8 +176,30 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
         const currentInstallments = debt.installments || [];
         const updatedInstallments = [...currentInstallments, newInstallment];
 
-        // Taksitli harcama kart borcuna eklenmez, sadece installments listesine
-        // Her ay ekstre kesildiğinde o ayın taksit toplamı borca eklenir (manuel veya otomatik)
+        updateDebtInDb(debtId, {
+            installments: updatedInstallments
+        });
+    };
+
+    const deleteInstallmentFromCard = (debtId: string, installmentId: string) => {
+        const debt = debts.find(d => d.id === debtId);
+        if (!debt || debt.type !== 'credit_card' || !debt.installments) return;
+
+        const updatedInstallments = debt.installments.filter(i => i.id !== installmentId);
+
+        updateDebtInDb(debtId, {
+            installments: updatedInstallments
+        });
+    };
+
+    const updateInstallmentOnCard = (debtId: string, installmentId: string, data: Partial<import('../types').CreditCardInstallment>) => {
+        const debt = debts.find(d => d.id === debtId);
+        if (!debt || debt.type !== 'credit_card' || !debt.installments) return;
+
+        const updatedInstallments = debt.installments.map(i =>
+            i.id === installmentId ? { ...i, ...data } : i
+        );
+
         updateDebtInDb(debtId, {
             installments: updatedInstallments
         });
@@ -186,6 +214,7 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
             targetAmount: goalData.targetAmount,
             currentAmount: 0,
             deadline: goalData.deadline,
+            currency: goalData.currency || 'TRY',
             status: 'active' as const,
             participants: goalData.participants.map(name => ({
                 id: uuidv4(),
@@ -199,6 +228,10 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     };
 
     const deleteGoal = (id: string) => deleteGoalFromDb(id);
+
+    const updateGoal = (id: string, data: Partial<Goal>) => {
+        updateGoalInDb(id, data);
+    };
 
     const addContribution = (goalId: string, participantId: string, amount: number) => {
         const goal = goals.find(g => g.id === goalId);
@@ -274,11 +307,11 @@ export const FinanceProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const value: FinanceContextType = {
         transactions, subscriptions, debts, investments,
         addTransaction, deleteTransaction, updateTransaction,
-        addSubscription, deleteSubscription, paySubscription,
-        addDebt, deleteDebt, updateDebt, payDebt, addInstallmentToCard,
-        addInvestment, deleteInvestment, updateInvestmentPrice,
+        addSubscription, deleteSubscription, updateSubscription, paySubscription,
+        addDebt, deleteDebt, updateDebt, payDebt, addInstallmentToCard, deleteInstallmentFromCard, updateInstallmentOnCard,
+        addInvestment, deleteInvestment, updateInvestmentPrice, updateInvestment,
         refreshMarketRates, isLoadingRates,
-        goals, addGoal, deleteGoal, addContribution,
+        goals, addGoal, deleteGoal, updateGoal, addContribution,
         goalInvitations,
         acceptInvitation: handleAcceptInvitation,
         rejectInvitation: handleRejectInvitation,

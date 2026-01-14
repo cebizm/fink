@@ -5,6 +5,7 @@ import { AddDebtModal } from '../Modals/AddDebtModal';
 import { PayDebtModal } from '../Modals/PayDebtModal';
 import { AddInstallmentModal } from '../Modals/AddInstallmentModal';
 import { EditDebtModal } from '../Modals/EditDebtModal';
+import { EditInstallmentModal } from '../Modals/EditInstallmentModal';
 import type { Debt } from '../../types';
 import './Debts.css';
 import { startOfMonth, startOfYear, isAfter } from 'date-fns';
@@ -16,7 +17,7 @@ import { FREE_TIER_LIMITS } from '../../constants/limits';
 import { PremiumUpsellModal } from '../Modals/PremiumUpsellModal';
 
 export const Debts: React.FC = () => {
-    const { debts, deleteDebt, isPrivacyMode, transactions, addInstallmentToCard } = useFinance();
+    const { debts, deleteDebt, isPrivacyMode, transactions, addInstallmentToCard, deleteInstallmentFromCard, updateInstallmentOnCard } = useFinance();
     const { user } = useAuth();
 
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -26,6 +27,7 @@ export const Debts: React.FC = () => {
     const [installmentModalDebtId, setInstallmentModalDebtId] = useState<string | null>(null);
     const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
     const [editDebtId, setEditDebtId] = useState<string | null>(null);
+    const [editInstallment, setEditInstallment] = useState<{ debtId: string, installment: import('../../types').CreditCardInstallment } | null>(null);
 
     const handleAddDebt = () => {
         if (!user?.isPremium && debts.length >= FREE_TIER_LIMITS.MAX_DEBTS) {
@@ -440,7 +442,14 @@ export const Debts: React.FC = () => {
                                                             <div style={{ flex: 1, minWidth: '100px' }}>
                                                                 <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.6)' }}>Kullanılabilir</span>
                                                                 <div style={{ color: '#10b981', fontWeight: 500 }}>
-                                                                    {isPrivacyMode ? '****' : `₺${(debt.totalAmount - debt.remainingAmount).toLocaleString()}`}
+                                                                    {isPrivacyMode ? '****' : (() => {
+                                                                        const installmentsRemainingTotal = (debt.installments || []).reduce((sum, inst) => {
+                                                                            const remainingPrincipal = inst.totalAmount - (inst.paidInstallments * inst.monthlyAmount);
+                                                                            return sum + Math.max(0, remainingPrincipal);
+                                                                        }, 0);
+                                                                        const availableLimit = debt.totalAmount - debt.remainingAmount - installmentsRemainingTotal;
+                                                                        return `₺${Math.max(0, availableLimit).toLocaleString('tr-TR', { maximumFractionDigits: 2 })}`;
+                                                                    })()}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -467,12 +476,40 @@ export const Debts: React.FC = () => {
                                                                                     {inst.paidInstallments}/{inst.installmentCount} taksit ödendi
                                                                                 </div>
                                                                             </div>
-                                                                            <div style={{ textAlign: 'right' }}>
-                                                                                <div style={{ color: '#fbbf24', fontWeight: 600, fontSize: '0.9rem' }}>
-                                                                                    ₺{inst.monthlyAmount.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}/ay
+                                                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                                                <div style={{ textAlign: 'right' }}>
+                                                                                    <div style={{ color: '#fbbf24', fontWeight: 600, fontSize: '0.9rem' }}>
+                                                                                        ₺{inst.monthlyAmount.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}/ay
+                                                                                    </div>
+                                                                                    <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>
+                                                                                        Toplam: ₺{inst.totalAmount.toLocaleString()}
+                                                                                    </div>
                                                                                 </div>
-                                                                                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem' }}>
-                                                                                    Toplam: ₺{inst.totalAmount.toLocaleString()}
+                                                                                <div style={{ display: 'flex', gap: '2px' }}>
+                                                                                    <button
+                                                                                        className="btn-icon-danger"
+                                                                                        style={{ width: '24px', height: '24px', padding: 0 }}
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            setEditInstallment({ debtId: debt.id, installment: inst });
+                                                                                        }}
+                                                                                        title="Düzenle"
+                                                                                    >
+                                                                                        <Pencil size={14} />
+                                                                                    </button>
+                                                                                    <button
+                                                                                        className="btn-icon-danger"
+                                                                                        style={{ width: '24px', height: '24px', padding: 0 }}
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            if (confirm('Bu taksiti silmek istediğinize emin misiniz?')) {
+                                                                                                deleteInstallmentFromCard(debt.id, inst.id);
+                                                                                            }
+                                                                                        }}
+                                                                                        title="Sil"
+                                                                                    >
+                                                                                        <Trash2 size={14} />
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -580,6 +617,16 @@ export const Debts: React.FC = () => {
                 isOpen={!!editDebtId}
                 debtId={editDebtId}
                 onClose={() => setEditDebtId(null)}
+            />
+            <EditInstallmentModal
+                isOpen={!!editInstallment}
+                onClose={() => setEditInstallment(null)}
+                installment={editInstallment?.installment || null}
+                onUpdate={(data) => {
+                    if (editInstallment) {
+                        updateInstallmentOnCard(editInstallment.debtId, editInstallment.installment.id, data);
+                    }
+                }}
             />
         </div>
     );

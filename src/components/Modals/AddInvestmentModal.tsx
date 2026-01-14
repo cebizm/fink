@@ -3,7 +3,7 @@ import { useFinance } from '../../context/FinanceContext';
 import { X } from 'lucide-react';
 import './AddInvestmentModal.css';
 import type { InvestmentType } from '../../types';
-import { searchCurrencies, type Currency } from '../../constants/currencies';
+import { searchCurrencies, searchPreciousMetals, type Currency, type PreciousMetal } from '../../constants/currencies';
 
 interface AddInvestmentModalProps {
     isOpen: boolean;
@@ -66,6 +66,9 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
     const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
     const [currencySuggestions, setCurrencySuggestions] = useState<Currency[]>([]);
     const [selectedCurrency, setSelectedCurrency] = useState<Currency | null>(null);
+    const [showMetalDropdown, setShowMetalDropdown] = useState(false);
+    const [metalSuggestions, setMetalSuggestions] = useState<PreciousMetal[]>([]);
+    const [selectedMetal, setSelectedMetal] = useState<PreciousMetal | null>(null);
 
     // Reset fields when type changes
     useEffect(() => {
@@ -76,6 +79,8 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
         setInterestRate('');
         setSelectedCurrency(null);
         setShowCurrencyDropdown(false);
+        setSelectedMetal(null);
+        setShowMetalDropdown(false);
     }, [type]);
 
     useEffect(() => {
@@ -88,16 +93,26 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
             setInterestRate('');
             setSelectedCurrency(null);
             setShowCurrencyDropdown(false);
+            setSelectedMetal(null);
+            setShowMetalDropdown(false);
         }
     }, [isOpen]);
 
-    // Update currency suggestions when name changes
+    // Update suggestions when name changes
     useEffect(() => {
         if (type === 'currency' && name.length > 0) {
             const suggestions = searchCurrencies(name);
             setCurrencySuggestions(suggestions);
         } else {
             setCurrencySuggestions([]);
+        }
+        if (type === 'gold' && name.length > 0) {
+            const suggestions = searchPreciousMetals(name);
+            setMetalSuggestions(suggestions);
+        } else if (type === 'gold' && name.length === 0) {
+            setMetalSuggestions(searchPreciousMetals(''));
+        } else {
+            setMetalSuggestions([]);
         }
     }, [name, type]);
 
@@ -181,7 +196,7 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
                         <label>Varlık Türü</label>
                         <div className="type-buttons">
                             <button type="button" className={`type-btn ${type === 'currency' ? 'active' : ''}`} onClick={() => setType('currency')}>Döviz</button>
-                            <button type="button" className={`type-btn ${type === 'gold' ? 'active' : ''}`} onClick={() => setType('gold')}>Altın</button>
+                            <button type="button" className={`type-btn ${type === 'gold' ? 'active' : ''}`} onClick={() => setType('gold')}>K.Madenler</button>
                             <button type="button" className={`type-btn ${type === 'stock' ? 'active' : ''}`} onClick={() => setType('stock')} disabled={true} style={{ opacity: 0.5, cursor: 'not-allowed' }} title="Bu özellik yakında gelecek! 🚀">Hisse 🚀</button>
                             <button type="button" className={`type-btn ${type === 'deposit' ? 'active' : ''}`} onClick={() => setType('deposit')}>Mevduat</button>
                         </div>
@@ -230,6 +245,52 @@ const AddInvestmentModalContent: React.FC<AddInvestmentModalProps> = ({ isOpen, 
                                                         <span className="currency-symbol">({currency.symbol})</span>
                                                     </div>
                                                     <div className="currency-name">{currency.nameTr}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </>
+                        ) : type === 'gold' ? (
+                            <>
+                                <div className="currency-input-wrapper" style={{ position: 'relative' }}>
+                                    {selectedMetal && (
+                                        <span className="currency-flag" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem' }}>
+                                            {selectedMetal.symbol}
+                                        </span>
+                                    )}
+                                    <input
+                                        type="text"
+                                        placeholder="Maden ara... (örn: Altın, Gümüş, Platin)"
+                                        value={name}
+                                        onChange={(e) => {
+                                            setName(e.target.value);
+                                            setShowMetalDropdown(true);
+                                            setSelectedMetal(null);
+                                        }}
+                                        onFocus={() => setShowMetalDropdown(true)}
+                                        style={{ paddingLeft: selectedMetal ? '40px' : '12px' }}
+                                        required
+                                    />
+                                </div>
+                                {showMetalDropdown && metalSuggestions.length > 0 && (
+                                    <div className="currency-dropdown">
+                                        {metalSuggestions.map((metal) => (
+                                            <div
+                                                key={metal.code}
+                                                className="currency-option"
+                                                onClick={() => {
+                                                    setName(metal.nameTr);
+                                                    setSelectedMetal(metal);
+                                                    setShowMetalDropdown(false);
+                                                }}
+                                            >
+                                                <span className="currency-flag">{metal.symbol}</span>
+                                                <div className="currency-info">
+                                                    <div className="currency-code">
+                                                        <span>{metal.nameTr}</span>
+                                                    </div>
+                                                    <div className="currency-name">{metal.unit}</div>
                                                 </div>
                                             </div>
                                         ))}

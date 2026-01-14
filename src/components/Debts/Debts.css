@@ -551,3 +551,26 @@
 .action-btn.pay:hover {
     background-color: rgba(16, 185, 129, 0.2);
 }
+
+.btn-icon-danger {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+}
+
+.debt-card:hover .btn-icon-danger,
+.credit-card-visual:hover .btn-icon-danger {
+    opacity: 1;
+}
+
+.btn-icon-danger:hover {
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 4px;
+}

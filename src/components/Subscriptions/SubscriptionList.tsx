@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useFinance } from '../../context/FinanceContext';
-import { CreditCard, Calendar, Plus, Trash2, Smartphone, Zap, Droplets, Wifi, Eye, EyeOff } from 'lucide-react';
+import { CreditCard, Calendar, Plus, Trash2, Smartphone, Zap, Droplets, Wifi, Eye, EyeOff, Pencil } from 'lucide-react';
 import { AddSubscriptionModal } from '../Modals/AddSubscriptionModal';
+import { EditSubscriptionModal } from '../Modals/EditSubscriptionModal';
 import { subscriptionPlatforms, findPlatformByName } from '../../constants/subscriptionPlatforms';
 import './SubscriptionList.css';
 
 export const SubscriptionList: React.FC = () => {
     const { subscriptions, deleteSubscription, isPrivacyMode, togglePrivacyMode } = useFinance();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [editSubscriptionId, setEditSubscriptionId] = useState<string | null>(null);
     const [activeTab, setActiveTab] = useState<'subscription' | 'bill'>('subscription');
 
     const filteredSubscriptions = subscriptions.filter(s => {
@@ -155,13 +157,22 @@ export const SubscriptionList: React.FC = () => {
                             <div className="sub-cost">
                                 {isPrivacyMode ? '**** ₺' : `₺${sub.amount.toLocaleString()}`}
                             </div>
-                            <button
-                                className="btn-icon-danger"
-                                onClick={() => deleteSubscription(sub.id)}
-                                title="Sil"
-                            >
-                                <Trash2 size={18} />
-                            </button>
+                            <div style={{ display: 'flex', gap: '4px' }}>
+                                <button
+                                    className="btn-icon-danger"
+                                    onClick={() => setEditSubscriptionId(sub.id)}
+                                    title="Düzenle"
+                                >
+                                    <Pencil size={18} />
+                                </button>
+                                <button
+                                    className="btn-icon-danger"
+                                    onClick={() => deleteSubscription(sub.id)}
+                                    title="Sil"
+                                >
+                                    <Trash2 size={18} />
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -177,6 +188,11 @@ export const SubscriptionList: React.FC = () => {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             />
-        </div>
+            <EditSubscriptionModal
+                isOpen={!!editSubscriptionId}
+                onClose={() => setEditSubscriptionId(null)}
+                subscriptionId={editSubscriptionId}
+            />
+        </div >
     );
 };
